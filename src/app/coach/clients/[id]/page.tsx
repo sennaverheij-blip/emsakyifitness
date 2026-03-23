@@ -26,6 +26,9 @@ export default function ClientDetail() {
   const [tab, setTab] = useState<'precall' | 'checkins' | 'onboarding'>('precall')
   const [aiAnalysis, setAiAnalysis] = useState<string | null>(null)
   const [aiLoading, setAiLoading] = useState(false)
+  const [onboardingSending, setOnboardingSending] = useState(false)
+  const [onboardingSent, setOnboardingSent] = useState(false)
+  const [onboardingUrl, setOnboardingUrl] = useState<string | null>(null)
 
   useEffect(() => {
     fetch(`/api/clients/${id}`).then(r => r.json()).then(data => {
@@ -49,6 +52,21 @@ export default function ClientDetail() {
       setAiAnalysis('Failed to generate analysis. Check API configuration.')
     }
     setAiLoading(false)
+  }
+
+  const sendOnboarding = async () => {
+    setOnboardingSending(true)
+    try {
+      const res = await fetch(`/api/clients/${id}/send-onboarding`, { method: 'POST' })
+      const data = await res.json()
+      if (data.success) {
+        setOnboardingSent(true)
+        setOnboardingUrl(data.onboardingUrl)
+      }
+    } catch {
+      alert('Failed to send onboarding form')
+    }
+    setOnboardingSending(false)
   }
 
   if (loading) {
@@ -90,12 +108,18 @@ export default function ClientDetail() {
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap gap-3">
-          <Link href={`/coach/messages`} className="btn-secondary !py-2.5 !px-5 !text-xs">
-            Send Message
+        <div className="flex flex-wrap gap-2">
+          <button onClick={sendOnboarding} disabled={onboardingSending}
+            className="btn-secondary !py-2.5 !px-4 !text-xs !rounded-lg">
+            {onboardingSending ? 'Sending...' : onboardingSent ? 'Sent ✓' : 'Send Onboarding Form'}
+          </button>
+          <Link href="/coach/messages"
+            className="btn-secondary !py-2.5 !px-4 !text-xs !rounded-lg">
+            Message Client
           </Link>
-          <button onClick={() => setTab('precall')} className="btn-primary !py-2.5 !px-5 !text-xs">
-            Pre-Call Overview
+          <button onClick={() => { setTab('precall'); generateAnalysis() }}
+            className="btn-primary !py-2.5 !px-4 !text-xs !rounded-lg">
+            Pre-Call Briefing
           </button>
         </div>
       </div>
@@ -312,8 +336,31 @@ export default function ClientDetail() {
             </div>
           ) : (
             <div className="text-center py-4">
-              <p className="text-brand-cream/40 font-body text-sm mb-4">No onboarding form sent yet</p>
-              <button className="btn-primary !text-sm">Send Onboarding Form</button>
+              {onboardingSent ? (
+                <>
+                  <div className="w-12 h-12 rounded-full border-2 border-green-400 flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-6 h-6 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <p className="text-green-400 font-headline font-semibold mb-2">Onboarding form sent!</p>
+                  <p className="text-sm text-brand-cream/50 font-body mb-3">An email has been sent to {client.email}</p>
+                  {onboardingUrl && (
+                    <div className="bg-brand-surface rounded-lg p-3 mt-3">
+                      <p className="text-xs text-brand-cream/40 font-body mb-1">Direct link (share manually if needed):</p>
+                      <code className="text-xs text-brand-bronze break-all">{onboardingUrl}</code>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <p className="text-brand-cream/40 font-body text-sm mb-4">No onboarding form sent yet</p>
+                  <button onClick={sendOnboarding} disabled={onboardingSending} className="btn-primary !text-sm">
+                    {onboardingSending ? 'Sending...' : 'Send Onboarding Form'}
+                  </button>
+                  <p className="text-xs text-brand-cream/30 font-body mt-3">
+                    This will send an email to {client.email} with a link to complete the onboarding questionnaire.
+                  </p>
+                </>
+              )}
             </div>
           )}
         </div>
