@@ -55,16 +55,22 @@ export default function ClientDetail() {
   }
 
   const sendOnboarding = async () => {
+    console.log('[ONBOARDING] Sending for client:', id)
     setOnboardingSending(true)
     try {
       const res = await fetch(`/api/clients/${id}/send-onboarding`, { method: 'POST' })
       const data = await res.json()
+      console.log('[ONBOARDING] Response:', data)
       if (data.success) {
         setOnboardingSent(true)
         setOnboardingUrl(data.onboardingUrl)
+        alert(`Onboarding email sent to ${data.message?.split('to ')[1] || 'client'}`)
+      } else {
+        alert('Error: ' + (data.error || 'Unknown error'))
       }
-    } catch {
-      alert('Failed to send onboarding form')
+    } catch (err) {
+      console.error('[ONBOARDING] Error:', err)
+      alert('Failed to send onboarding form. Check console for details.')
     }
     setOnboardingSending(false)
   }
@@ -109,16 +115,21 @@ export default function ClientDetail() {
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button onClick={sendOnboarding} disabled={onboardingSending}
-            className="btn-secondary !py-2.5 !px-4 !text-xs !rounded-lg">
+          <button type="button" onClick={sendOnboarding} disabled={onboardingSending}
+            style={{ position: 'relative', zIndex: 10 }}
+            className="inline-flex items-center justify-center gap-2 bg-transparent text-brand-bronze font-headline font-semibold text-xs px-4 py-2.5 border-2 border-brand-bronze rounded-lg uppercase tracking-wide cursor-pointer transition-all duration-200 hover:bg-brand-bronze hover:text-brand-black">
             {onboardingSending ? 'Sending...' : onboardingSent ? 'Sent ✓' : 'Send Onboarding Form'}
           </button>
           <Link href="/coach/messages"
-            className="btn-secondary !py-2.5 !px-4 !text-xs !rounded-lg">
+            style={{ position: 'relative', zIndex: 10 }}
+            className="inline-flex items-center justify-center gap-2 bg-transparent text-brand-bronze font-headline font-semibold text-xs px-4 py-2.5 border-2 border-brand-bronze rounded-lg uppercase tracking-wide cursor-pointer transition-all duration-200 hover:bg-brand-bronze hover:text-brand-black">
             Message Client
           </Link>
-          <button onClick={() => { setTab('precall'); generateAnalysis() }}
-            className="btn-primary !py-2.5 !px-4 !text-xs !rounded-lg">
+          <button type="button" onClick={() => { setTab('precall'); generateAnalysis() }}
+            style={{ position: 'relative', zIndex: 10 }}
+            className="inline-flex items-center justify-center gap-2 font-headline font-semibold text-xs px-4 py-2.5 rounded-lg uppercase tracking-wide cursor-pointer transition-all duration-200 text-brand-black"
+            >
+            <span style={{ background: 'linear-gradient(135deg, #C9A961, #D4AF37)', position: 'absolute', inset: 0, borderRadius: 'inherit', zIndex: -1 }} />
             Pre-Call Briefing
           </button>
         </div>
@@ -353,7 +364,8 @@ export default function ClientDetail() {
               ) : (
                 <>
                   <p className="text-brand-cream/40 font-body text-sm mb-4">No onboarding form sent yet</p>
-                  <button onClick={sendOnboarding} disabled={onboardingSending} className="btn-primary !text-sm">
+                  <button type="button" onClick={sendOnboarding} disabled={onboardingSending}
+                    style={{ position: 'relative', zIndex: 10, background: 'linear-gradient(135deg, #C9A961, #D4AF37)', color: '#0A0A0A', border: 'none', padding: '12px 24px', borderRadius: '50px', fontWeight: 600, fontSize: '14px', cursor: 'pointer', letterSpacing: '0.5px', textTransform: 'uppercase' as const }}>
                     {onboardingSending ? 'Sending...' : 'Send Onboarding Form'}
                   </button>
                   <p className="text-xs text-brand-cream/30 font-body mt-3">
