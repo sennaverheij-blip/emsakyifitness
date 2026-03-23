@@ -487,7 +487,7 @@ export default function FunnelPage() {
               {!quizResult ? (
                 <div key={quizStep} className="animate-fade-in">
                   <h2 className={`font-headline font-bold text-2xl md:text-3xl mb-3 leading-tight ${
-                    quizSteps[quizStep].highlight ? 'border-l-4 border-brand-bronze pl-5' : ''
+                    (quizSteps[quizStep] as any).highlight ? 'border-l-4 border-brand-bronze pl-5' : ''
                   }`}>
                     {quizSteps[quizStep].question}
                   </h2>
