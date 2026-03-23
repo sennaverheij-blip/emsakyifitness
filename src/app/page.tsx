@@ -564,13 +564,25 @@ export default function FunnelPage() {
                         Emin reviews all applications personally. Book your Strategy Call below — a no-pressure conversation to see if the fit is right.
                       </p>
                       <div className="glow-card">
-                        <div className="glow-card-inner text-center">
-                          <p className="font-headline font-semibold mb-2">Book Your Presence Strategy Call</p>
-                          <p className="text-sm text-brand-cream/40 mb-4">30-minute private call with Emin. Not a sales pitch — a strategy session.</p>
-                          <div className="bg-brand-black/50 rounded-xl h-[400px] flex items-center justify-center text-brand-cream/20 text-sm border border-brand-slate/30">
-                            [Calendly Embed]
+                        <div className="glow-card-inner text-center !p-0 overflow-hidden">
+                          <div className="p-6 pb-2">
+                            <p className="font-headline font-semibold mb-2">Book Your Presence Strategy Call</p>
+                            <p className="text-sm text-brand-cream/40 mb-4">30-minute private call with Emin. Not a sales pitch — a strategy session.</p>
                           </div>
+                          <iframe
+                            src="https://calendly.com/d/ctnj-zk7-psy/strategy-call?hide_gdpr_banner=1&background_color=131313&text_color=F5F1E8&primary_color=C9A961"
+                            width="100%"
+                            height="650"
+                            frameBorder="0"
+                            title="Book Strategy Call"
+                            className="border-t border-white/5"
+                          />
                         </div>
+                      </div>
+                      <div className="flex flex-wrap justify-center gap-4 text-xs text-brand-cream/30 mt-4">
+                        <span>Limited spots — reviewed weekly</span>
+                        <span>·</span>
+                        <span>Your information is private</span>
                       </div>
                     </>
                   )}
