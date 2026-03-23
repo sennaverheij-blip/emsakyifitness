@@ -90,6 +90,14 @@ export default function ClientDetail() {
             </div>
           </div>
         </div>
+        <div className="flex flex-wrap gap-3">
+          <Link href={`/coach/messages`} className="btn-secondary !py-2.5 !px-5 !text-xs">
+            Send Message
+          </Link>
+          <button onClick={() => setTab('precall')} className="btn-primary !py-2.5 !px-5 !text-xs">
+            Pre-Call Overview
+          </button>
+        </div>
       </div>
 
       {/* Key Stats */}
