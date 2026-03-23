@@ -61,14 +61,13 @@ const quizSteps = [
     placeholder: 'E.g. Netherlands, United Kingdom, United States',
   },
   {
-    question: 'What is your investment budget for this transformation?',
-    micro: 'This helps us recommend the right path for you.',
-    highlight: true,
+    question: 'What motivated you to look into coaching right now?',
+    micro: 'Understanding your "why" helps Emin tailor the call to you.',
     options: [
-      "$3,500+ — I'm ready to invest in the elite experience",
-      "$1,500–$3,499 — community tier is more my range",
-      "$500–$1,499 — I'd like to explore options",
-      "Under $500 — I'm not financially ready right now",
+      "I've hit a plateau and need expert guidance to break through",
+      "I want to build a physique that matches my ambition",
+      "I'm ready for a complete lifestyle and identity shift",
+      "Someone I respect recommended The Presence Protocol",
     ],
   },
 ]
@@ -83,7 +82,6 @@ export default function FunnelPage() {
   const [quizStep, setQuizStep] = useState(0)
   const [quizAnswers, setQuizAnswers] = useState<(string | null)[]>(Array(7).fill(null))
   const [quizResult, setQuizResult] = useState<string | null>(null)
-  const [nurture, setNurture] = useState({ email: '', submitted: false })
   const [headerScrolled, setHeaderScrolled] = useState(false)
 
   useEffect(() => {
@@ -102,7 +100,6 @@ export default function FunnelPage() {
     setQuizStep(0)
     setQuizAnswers(Array(7).fill(null))
     setQuizResult(null)
-    setNurture({ email: '', submitted: false })
   }, [])
 
   const selectAnswer = (answer: string) => {
@@ -122,12 +119,9 @@ export default function FunnelPage() {
     else calculateResult(quizAnswers)
   }
 
-  const calculateResult = (answers: (string | null)[]) => {
-    const budget = answers[6] || ''
-    if (budget.startsWith('$3,500')) setQuizResult('elite')
-    else if (budget.startsWith('$1,500')) setQuizResult('community')
-    else if (budget.startsWith('$500')) setQuizResult('soft-disqualify')
-    else setQuizResult('hard-disqualify')
+  const calculateResult = (_answers: (string | null)[]) => {
+    // All applicants go to Calendly booking
+    setQuizResult('qualified')
   }
 
   return (
@@ -142,9 +136,14 @@ export default function FunnelPage() {
       }`}>
         <div className="max-w-[1200px] mx-auto px-6 py-4 flex items-center justify-between">
           <Image src="/assets/icon.png" alt="emsakyifitness" width={40} height={40} className="rounded" />
-          <button onClick={openQuiz} className="btn-primary !py-3 !px-6 !text-sm hidden sm:inline-flex">
-            Apply Now
-          </button>
+          <div className="flex items-center gap-4">
+            <a href="/login" className="text-sm font-headline font-semibold text-brand-cream/50 hover:text-brand-bronze transition-colors hidden sm:inline-flex">
+              Login
+            </a>
+            <button onClick={openQuiz} className="btn-primary !py-3 !px-6 !text-sm hidden sm:inline-flex">
+              Apply Now
+            </button>
+          </div>
         </div>
       </header>
 
@@ -348,65 +347,33 @@ export default function FunnelPage() {
           </div>
         </section>
 
-        {/* ====== OFFER ====== */}
+        {/* ====== WHAT YOU GET ====== */}
         <section className="py-28 relative animated-line">
-          <div className="max-w-[1000px] mx-auto px-6">
+          <div className="max-w-[900px] mx-auto px-6">
             <div className="text-center mb-16">
-              <p className="text-xs font-headline font-semibold tracking-[4px] uppercase text-brand-bronze mb-4 reveal">Investment</p>
-              <h2 className="font-headline text-h2 reveal reveal-delay-1">Choose Your <span className="text-gradient-bronze">Path</span></h2>
+              <p className="text-xs font-headline font-semibold tracking-[4px] uppercase text-brand-bronze mb-4 reveal">What You Get</p>
+              <h2 className="font-headline text-h2 reveal reveal-delay-1">Everything You Need to <span className="text-gradient-bronze">Transform</span></h2>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Elite */}
-              <div className="glow-card reveal">
-                <div className="glow-card-inner relative">
-                  <span className="absolute -top-[1px] left-6 right-6 h-[2px] bg-gradient-to-r from-transparent via-brand-bronze to-transparent" />
-                  <div className="inline-block px-3 py-1 rounded-full bg-brand-bronze/10 border border-brand-bronze/30 text-[10px] font-headline font-bold tracking-[2px] uppercase text-brand-bronze mb-5">
-                    Most Transformation
-                  </div>
-                  <h3 className="font-headline font-bold text-2xl mb-1">The Presence Protocol</h3>
-                  <p className="text-xs text-brand-cream/40 uppercase tracking-wider mb-4">Elite</p>
-                  <div className="font-headline font-extrabold text-4xl text-gradient-bronze mb-1">$3,497</div>
-                  <p className="text-sm text-brand-cream/40 mb-6">16-Week Commitment</p>
-                  <ul className="space-y-3 mb-8">
-                    {[
-                      'Weekly Command Sessions (1-on-1 strategy calls)',
-                      'Identity & Presence Architecture',
-                      'Frictionless Implementation Support',
-                      'Bespoke Performance Protocols',
-                      'Priority "Cornerman" Access (direct line)',
-                    ].map((item) => (
-                      <li key={item} className="flex items-start gap-3 text-sm font-body text-brand-cream/70">
-                        <span className="text-brand-bronze mt-0.5 shrink-0">✓</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <button onClick={openQuiz} className="btn-primary w-full">Apply for Elite →</button>
+            <div className="glow-card reveal">
+              <div className="glow-card-inner">
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {[
+                    'Personalised training protocols built for your body and goals',
+                    'Custom nutrition plans adapted to your lifestyle and location',
+                    'Direct access to your coach between sessions',
+                    'Weekly strategy calls to keep you accountable',
+                    'Identity & presence architecture — not just fitness',
+                    'A lifestyle operating system you own permanently',
+                  ].map((item) => (
+                    <div key={item} className="flex items-start gap-3">
+                      <span className="text-brand-bronze mt-0.5 shrink-0 text-lg">✓</span>
+                      <span className="text-sm font-body text-brand-cream/70 leading-relaxed">{item}</span>
+                    </div>
+                  ))}
                 </div>
-              </div>
-
-              {/* Community */}
-              <div className="glow-card reveal reveal-delay-1">
-                <div className="glow-card-inner">
-                  <h3 className="font-headline font-bold text-2xl mb-1">The Inner Circle</h3>
-                  <p className="text-xs text-brand-cream/40 uppercase tracking-wider mb-4">Community</p>
-                  <div className="font-headline font-bold text-4xl text-brand-cream mb-1">$1,449</div>
-                  <p className="text-sm text-brand-cream/40 mb-6">Ongoing Membership</p>
-                  <ul className="space-y-3 mb-8">
-                    {[
-                      'The Presence Blueprint (full vault access)',
-                      'Inner Circle Community',
-                      'Bi-Weekly Group Command Calls',
-                      'Community Leaderboards',
-                    ].map((item) => (
-                      <li key={item} className="flex items-start gap-3 text-sm font-body text-brand-cream/70">
-                        <span className="text-brand-bronze mt-0.5 shrink-0">✓</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <button onClick={openQuiz} className="btn-secondary w-full">Join the Inner Circle →</button>
+                <div className="mt-8 text-center">
+                  <button onClick={openQuiz} className="btn-primary">Apply Now — Book Your Strategy Call →</button>
                 </div>
               </div>
             </div>
@@ -552,67 +519,36 @@ export default function FunnelPage() {
                 </div>
               ) : (
                 <div className="animate-fade-in text-center">
-                  {quizResult === 'elite' && (
-                    <>
-                      <div className="w-16 h-16 rounded-full bg-brand-bronze/10 border-2 border-brand-bronze flex items-center justify-center mx-auto mb-6">
-                        <svg className="w-8 h-8 text-brand-bronze" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <div className="w-16 h-16 rounded-full bg-brand-bronze/10 border-2 border-brand-bronze flex items-center justify-center mx-auto mb-6">
+                    <svg className="w-8 h-8 text-brand-bronze" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <h2 className="font-headline font-bold text-2xl md:text-3xl mb-4">
+                    You&apos;re a strong fit for <span className="text-gradient-bronze">The Presence Protocol</span>.
+                  </h2>
+                  <p className="font-body text-brand-cream/50 mb-8 max-w-md mx-auto leading-relaxed">
+                    Emin reviews all applications personally. Book your Strategy Call below — a no-pressure conversation to see if the fit is right.
+                  </p>
+                  <div className="glow-card">
+                    <div className="glow-card-inner text-center !p-0 overflow-hidden">
+                      <div className="p-6 pb-2">
+                        <p className="font-headline font-semibold mb-2">Book Your Presence Strategy Call</p>
+                        <p className="text-sm text-brand-cream/40 mb-4">30-minute private call with Emin. Not a sales pitch — a strategy session.</p>
                       </div>
-                      <h2 className="font-headline font-bold text-2xl md:text-3xl mb-4">
-                        You&apos;re a strong fit for <span className="text-gradient-bronze">The Presence Protocol</span>.
-                      </h2>
-                      <p className="font-body text-brand-cream/50 mb-8 max-w-md mx-auto leading-relaxed">
-                        Emin reviews all applications personally. Book your Strategy Call below — a no-pressure conversation to see if the fit is right.
-                      </p>
-                      <div className="glow-card">
-                        <div className="glow-card-inner text-center !p-0 overflow-hidden">
-                          <div className="p-6 pb-2">
-                            <p className="font-headline font-semibold mb-2">Book Your Presence Strategy Call</p>
-                            <p className="text-sm text-brand-cream/40 mb-4">30-minute private call with Emin. Not a sales pitch — a strategy session.</p>
-                          </div>
-                          <iframe
-                            src="https://calendly.com/d/ctnj-zk7-psy/strategy-call?hide_gdpr_banner=1&background_color=131313&text_color=F5F1E8&primary_color=C9A961"
-                            width="100%"
-                            height="650"
-                            frameBorder="0"
-                            title="Book Strategy Call"
-                            className="border-t border-white/5"
-                          />
-                        </div>
-                      </div>
-                      <div className="flex flex-wrap justify-center gap-4 text-xs text-brand-cream/30 mt-4">
-                        <span>Limited spots — reviewed weekly</span>
-                        <span>·</span>
-                        <span>Your information is private</span>
-                      </div>
-                    </>
-                  )}
-                  {quizResult === 'community' && (
-                    <>
-                      <h2 className="font-headline font-bold text-2xl md:text-3xl mb-4">The Inner Circle sounds like the right starting point.</h2>
-                      <p className="font-body text-brand-cream/50 mb-8 max-w-md mx-auto">Join a community of driven individuals who are serious about presence.</p>
-                      <button className="btn-primary text-lg">Join the Inner Circle →</button>
-                    </>
-                  )}
-                  {(quizResult === 'soft-disqualify' || quizResult === 'hard-disqualify') && (
-                    <>
-                      <h2 className="font-headline font-bold text-2xl mb-4">
-                        {quizResult === 'soft-disqualify' ? 'We appreciate your honesty.' : "Right now might not be the moment — and that's okay."}
-                      </h2>
-                      <p className="font-body text-brand-cream/50 mb-8 max-w-md mx-auto leading-relaxed">
-                        {quizResult === 'soft-disqualify'
-                          ? "Drop your email and we'll send you some high-value resources to get started."
-                          : "We'll send you some free resources to start building your foundation."}
-                      </p>
-                      {!nurture.submitted ? (
-                        <form onSubmit={(e) => { e.preventDefault(); setNurture({ ...nurture, submitted: true }) }} className="max-w-sm mx-auto space-y-3">
-                          <input type="email" className="brand-input" placeholder="Your email address" value={nurture.email} onChange={(e) => setNurture({ ...nurture, email: e.target.value })} required />
-                          <button type="submit" className="btn-primary w-full">Send Me Free Resources →</button>
-                        </form>
-                      ) : (
-                        <div className="text-brand-bronze font-headline font-semibold text-lg">✓ You&apos;re in. Check your inbox.</div>
-                      )}
-                    </>
-                  )}
+                      <iframe
+                        src="https://calendly.com/d/ctnj-zk7-psy/strategy-call?hide_gdpr_banner=1&background_color=131313&text_color=F5F1E8&primary_color=C9A961"
+                        width="100%"
+                        height="650"
+                        frameBorder="0"
+                        title="Book Strategy Call"
+                        className="border-t border-white/5"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap justify-center gap-4 text-xs text-brand-cream/30 mt-4">
+                    <span>Limited spots — reviewed weekly</span>
+                    <span>·</span>
+                    <span>Your information is private</span>
+                  </div>
                 </div>
               )}
             </div>
@@ -634,7 +570,7 @@ function FAQSection() {
     { q: "What does 'elite 1-on-1' actually mean day-to-day?", a: 'Direct access to Emin. Weekly strategy calls, real-time plan adjustments, and a communication channel for questions between sessions. Hands-on coaching, not a PDF and a prayer.' },
     { q: 'How is this different from a normal online coach?', a: "Most online coaches give you a template and check in weekly. The Presence Protocol is architected around your identity transformation — physique, habits, and operating system as one integrated protocol." },
     { q: 'What if I travel constantly or have irregular hours?', a: 'The protocol is built for high-performing people with demanding schedules. We adapt training to hotel gyms, travel days, and time zones. Your plan flexes with your life.' },
-    { q: "What's the investment and is there a payment plan?", a: 'The Presence Protocol (Elite) is $3,497 for 16 weeks. The Inner Circle is $1,449. Payment plans available — discussed on your strategy call.' },
+    { q: 'How do I get started?', a: "Click 'Apply Now', complete the short quiz, and book your free Strategy Call with Emin. On the call, we'll discuss your goals, your situation, and whether The Presence Protocol is the right fit. No pressure, no obligations." },
     { q: 'How quickly will I see results?', a: "Most clients notice meaningful changes within 3-4 weeks. By week 8, the visual transformation is undeniable. By week 16, it's permanent." },
   ]
 
