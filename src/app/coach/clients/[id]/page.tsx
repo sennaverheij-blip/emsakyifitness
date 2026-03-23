@@ -58,7 +58,11 @@ export default function ClientDetail() {
     console.log('[ONBOARDING] Sending for client:', id)
     setOnboardingSending(true)
     try {
-      const res = await fetch(`/api/clients/${id}/send-onboarding`, { method: 'POST' })
+      const res = await fetch('/api/send-onboarding', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clientId: id }),
+      })
       const data = await res.json()
       console.log('[ONBOARDING] Response:', data)
       if (data.success) {
