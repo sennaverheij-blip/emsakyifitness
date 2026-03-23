@@ -29,7 +29,7 @@ const quizSteps = [
   },
   {
     question: 'How serious are you about this?',
-    micro: 'We only work with men who are ready to commit.',
+    micro: 'We only work with people who are ready to commit.',
     options: [
       "I'm 100% committed. I follow through on what I invest in.",
       "I'm serious but I want to understand more first",
@@ -167,7 +167,7 @@ export default function FunnelPage() {
               {/* Left: Copy */}
               <div>
                 <h1 className="font-headline text-[clamp(2.4rem,5.5vw,3.6rem)] font-bold leading-[1.08] mb-6 reveal">
-                  The Men Who Command{' '}
+                  The People Who Command{' '}
                   <span className="text-brand-bronze">Every Room They Enter.</span>
                 </h1>
 
@@ -176,7 +176,7 @@ export default function FunnelPage() {
                 </p>
 
                 <div className="text-lg text-brand-cream/80 leading-relaxed mb-10 space-y-4 reveal reveal-delay-2">
-                  <p>Most men are background noise in their own lives. Their physique doesn&apos;t match their ambition. Their frame doesn&apos;t carry the weight of who they actually are.</p>
+                  <p>Most people are background noise in their own lives. Their physique doesn&apos;t match their ambition. Their frame doesn&apos;t carry the weight of who they actually are.</p>
                   <p><strong className="text-brand-cream">The Presence Protocol changes that — permanently.</strong></p>
                 </div>
 
@@ -207,7 +207,7 @@ export default function FunnelPage() {
             {/* Trust bar */}
             <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 reveal reveal-delay-4">
               {[
-                ['47+', 'Men Transformed'],
+                ['47+', 'Lives Transformed'],
                 ['16', 'Week Protocol'],
                 ['Elite', '1-on-1 Coaching'],
                 ['100%', 'Bespoke'],
@@ -244,7 +244,7 @@ export default function FunnelPage() {
         <section className="py-24 border-t border-brand-card">
           <div className="max-w-[1200px] mx-auto px-6">
             <h2 className="font-headline text-h2 mb-16 text-center reveal">
-              Who Is The Presence Protocol For?
+              Is The Presence Protocol For You?
             </h2>
 
             <div className="grid md:grid-cols-2 gap-8 mb-16">
@@ -406,9 +406,9 @@ export default function FunnelPage() {
             <div className="grid md:grid-cols-3 gap-6">
               {[
                 {
-                  name: 'Marcus, 34',
+                  name: 'Sarah, 31',
                   role: 'Entrepreneur',
-                  quote: "I walked into my boardroom after 12 weeks and my business partner said 'What happened to you?' That's when I knew.",
+                  quote: "I walked into a pitch meeting after 12 weeks and my business partner said 'What happened to you?' That's when I knew the protocol was real.",
                 },
                 {
                   name: 'James, 29',
@@ -416,9 +416,9 @@ export default function FunnelPage() {
                   quote: "I spent 3 years at the gym with nothing to show for it. Emin restructured everything in week one. By week 8, I didn't recognise myself.",
                 },
                 {
-                  name: 'Daniel, 41',
-                  role: 'Corporate Director',
-                  quote: 'The Presence Protocol isn\'t a fitness programme. It\'s an identity upgrade. My confidence, my frame, my energy — everything shifted.',
+                  name: 'Priya, 35',
+                  role: 'Creative Director',
+                  quote: "The Presence Protocol isn't a fitness programme. It's an identity upgrade. My confidence, my frame, my energy — everything shifted.",
                 },
               ].map((t, i) => (
                 <div key={t.name} className={`brand-card reveal reveal-delay-${i + 1}`}>
@@ -592,7 +592,7 @@ export default function FunnelPage() {
                         The Inner Circle sounds like the right starting point.
                       </h2>
                       <p className="font-body text-brand-cream/60 mb-8 max-w-md mx-auto">
-                        Join a brotherhood of men who are serious about presence.
+                        Join a community of driven individuals who are serious about presence.
                       </p>
                       <button className="btn-primary text-lg">Join the Inner Circle →</button>
                     </>
@@ -656,7 +656,7 @@ function FAQSection() {
   const faqs = [
     {
       q: "Is this for me if I'm not a beginner?",
-      a: "Absolutely. Most of our clients have training experience — they just haven't had programming designed for presence and authority. We meet you where you are and build from there.",
+      a: "Absolutely. Most of our clients have some training experience — they just haven't had programming designed for presence and authority. We meet you where you are and build from there.",
     },
     {
       q: "What does 'elite 1-on-1' actually mean day-to-day?",
@@ -668,7 +668,7 @@ function FAQSection() {
     },
     {
       q: 'What if I travel constantly or have irregular hours?',
-      a: 'The protocol is built for high-performing men with demanding schedules. We adapt training to hotel gyms, travel days, and time zones. Your plan flexes with your life — not the other way around.',
+      a: 'The protocol is built for high-performing people with demanding schedules. We adapt training to hotel gyms, travel days, and time zones. Your plan flexes with your life — not the other way around.',
     },
     {
       q: "What's the investment and is there a payment plan?",
@@ -676,7 +676,7 @@ function FAQSection() {
     },
     {
       q: 'How quickly will I see results?',
-      a: "Most men notice meaningful changes within 3-4 weeks — in energy, posture, and how they carry themselves. By week 8, the visual transformation is undeniable. By week 16, it's permanent.",
+      a: "Most clients notice meaningful changes within 3-4 weeks — in energy, posture, and how they carry themselves. By week 8, the visual transformation is undeniable. By week 16, it's permanent.",
     },
   ]
 
