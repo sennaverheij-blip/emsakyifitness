@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { sendOnboardingEmail } from '@/lib/email'
 
 export async function POST(_req: Request, { params }: { params: { id: string } }) {
   try {
@@ -28,12 +29,22 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
       })
     }
 
-    // In production, send email here via Resend/Postmark/etc.
-    // For now, log and return success
-    const onboardingUrl = `${process.env.NEXTAUTH_URL || 'https://emsakyifitness.vercel.app'}/client/onboarding?token=${client.id}`
+    const baseUrl = process.env.NEXTAUTH_URL || 'https://emsakyifitness.vercel.app'
+    const onboardingUrl = `${baseUrl}/client/onboarding?token=${client.id}`
 
-    console.log(`[EMAIL] Onboarding form sent to ${client.email}`)
-    console.log(`[EMAIL] Onboarding URL: ${onboardingUrl}`)
+    // Send email via Resend
+    if (process.env.RESEND_API_KEY) {
+      const result = await sendOnboardingEmail(
+        client.email,
+        client.name || 'there',
+        onboardingUrl
+      )
+      console.log('[EMAIL] Onboarding sent:', result)
+    } else {
+      console.log('[EMAIL] RESEND_API_KEY not set — skipping email')
+      console.log('[EMAIL] Would send to:', client.email)
+      console.log('[EMAIL] Onboarding URL:', onboardingUrl)
+    }
 
     return NextResponse.json({
       success: true,
@@ -41,6 +52,7 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
       onboardingUrl,
     })
   } catch (error: any) {
+    console.error('[EMAIL ERROR]', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
