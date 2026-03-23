@@ -23,7 +23,7 @@ export default function LoginPage() {
     })
 
     if (res?.error) {
-      setError('Invalid email or password')
+      setError(res.error === 'CredentialsSignin' ? 'Invalid email or password' : res.error)
       setLoading(false)
       return
     }

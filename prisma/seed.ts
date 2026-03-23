@@ -8,7 +8,7 @@ async function main() {
 
   await prisma.user.upsert({
     where: { email: 'emin@emsakyifitness.com' },
-    update: {},
+    update: { hashedPassword: password },
     create: {
       email: 'emin@emsakyifitness.com',
       name: 'Emin',
@@ -20,7 +20,7 @@ async function main() {
   // Demo coach
   await prisma.user.upsert({
     where: { email: 'coach@emsakyifitness.com' },
-    update: {},
+    update: { hashedPassword: password },
     create: {
       email: 'coach@emsakyifitness.com',
       name: 'Coach Demo',
@@ -32,7 +32,7 @@ async function main() {
   // Demo client
   const client = await prisma.user.upsert({
     where: { email: 'client@demo.com' },
-    update: {},
+    update: { hashedPassword: password },
     create: {
       email: 'client@demo.com',
       name: 'Marcus',
