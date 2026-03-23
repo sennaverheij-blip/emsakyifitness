@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500&family=Playfair+Display:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
 
 @layer base {
   html {
@@ -14,6 +14,7 @@
     @apply bg-brand-black text-brand-cream font-body antialiased;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 
   ::selection {
@@ -23,87 +24,224 @@
 }
 
 @layer components {
-  /* Primary CTA */
+  /* =========================================
+     BUTTONS — Pill shape per brand guide
+     ========================================= */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2
-           bg-brand-bronze text-brand-black
+    @apply inline-flex items-center justify-center gap-2.5
            font-headline font-semibold text-base
-           px-8 py-4 rounded border-none
+           px-8 py-4 border-none
            uppercase tracking-wide
-           transition-all duration-200 ease-out
-           cursor-pointer;
+           cursor-pointer relative overflow-hidden;
+    background: linear-gradient(135deg, #C9A961, #D4AF37, #C9A961);
+    background-size: 200% 200%;
+    color: #0A0A0A;
+    border-radius: 50px;
     letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 20px rgba(201, 169, 97, 0.2), 0 0 0 0 rgba(201, 169, 97, 0);
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+    background-size: 200% 200%;
+    animation: shimmer-btn 3s ease-in-out infinite;
+    border-radius: inherit;
+  }
+
+  @keyframes shimmer-btn {
+    0% { background-position: 200% 200%; }
+    100% { background-position: -200% -200%; }
   }
 
   .btn-primary:hover {
-    @apply bg-brand-gold;
-    transform: scale(1.02);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 32px rgba(201, 169, 97, 0.35), 0 0 20px rgba(201, 169, 97, 0.15);
+    background-position: 100% 100%;
   }
 
   .btn-primary:active {
-    transform: scale(0.98);
+    transform: translateY(0) scale(0.98);
   }
 
-  /* Secondary CTA */
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2
            bg-transparent text-brand-bronze
            font-headline font-semibold text-base
-           px-8 py-4 rounded
+           px-8 py-4
            border-2 border-brand-bronze
            uppercase tracking-wide
-           transition-all duration-200 ease-out
            cursor-pointer;
+    border-radius: 50px;
     letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .btn-secondary:hover {
     @apply bg-brand-bronze text-brand-black;
+    box-shadow: 0 4px 20px rgba(201, 169, 97, 0.2);
+    transform: translateY(-1px);
   }
 
-  /* Brand card */
+  /* =========================================
+     GLASSMORPHISM CARD
+     ========================================= */
   .brand-card {
-    @apply bg-brand-card border border-brand-slate rounded-lg p-6;
+    @apply relative p-6 overflow-hidden;
+    background: linear-gradient(135deg, rgba(42,42,42,0.8), rgba(26,26,26,0.9));
+    border: 1px solid rgba(201, 169, 97, 0.12);
     border-left: 4px solid #C9A961;
+    border-radius: 12px;
+    backdrop-filter: blur(12px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* Form input */
+  .brand-card:hover {
+    border-color: rgba(201, 169, 97, 0.3);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4), 0 0 30px rgba(201, 169, 97, 0.06);
+    transform: translateY(-4px);
+  }
+
+  /* Animated glow border card */
+  .glow-card {
+    @apply relative overflow-hidden;
+    background: linear-gradient(145deg, #1A1A1A, #141414);
+    border-radius: 12px;
+    padding: 1px;
+  }
+
+  .glow-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(201,169,97,0.3), transparent 40%, transparent 60%, rgba(201,169,97,0.15));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    transition: all 0.4s ease;
+  }
+
+  .glow-card:hover::before {
+    background: linear-gradient(135deg, rgba(201,169,97,0.6), rgba(212,175,55,0.3) 40%, transparent 60%, rgba(201,169,97,0.4));
+  }
+
+  .glow-card-inner {
+    background: linear-gradient(145deg, #1A1A1A, #131313);
+    border-radius: 11px;
+    padding: 28px 24px;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+    transition: background 0.3s ease;
+  }
+
+  .glow-card:hover .glow-card-inner {
+    background: linear-gradient(145deg, #1E1E1E, #161616);
+  }
+
+  /* =========================================
+     FORM INPUTS
+     ========================================= */
   .brand-input {
-    @apply w-full bg-brand-surface border border-brand-slate rounded
+    @apply w-full bg-brand-surface border border-brand-slate
            text-brand-cream font-body px-4 py-3.5
-           transition-all duration-200;
+           transition-all duration-300;
     font-size: 16px;
+    border-radius: 8px;
   }
 
   .brand-input:focus {
     @apply border-brand-bronze outline-none;
-    box-shadow: 0 0 0 2px rgba(201, 169, 97, 0.2);
+    box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.15), 0 0 20px rgba(201, 169, 97, 0.05);
   }
 
   .brand-input::placeholder {
     @apply text-brand-slate;
   }
 
-  /* Section divider */
-  .section-divider {
-    @apply relative;
+  /* =========================================
+     BRONZE GRADIENT TEXT
+     ========================================= */
+  .text-gradient-bronze {
+    background: linear-gradient(135deg, #C9A961 0%, #D4AF37 50%, #C9A961 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
+  /* =========================================
+     SECTION DIVIDER
+     ========================================= */
   .section-divider::before {
     content: '';
-    @apply block w-10 h-0.5 bg-brand-bronze mb-6;
+    @apply block w-10 h-0.5 mb-6;
+    background: linear-gradient(90deg, #C9A961, #D4AF37);
   }
 
   .section-divider-center::before {
     @apply mx-auto;
   }
 
-  /* Scroll reveal */
+  /* =========================================
+     ANIMATED GRID BACKGROUND
+     ========================================= */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(201, 169, 97, 0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201, 169, 97, 0.015) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 70% 50% at 50% 30%, black 20%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 30%, black 20%, transparent 100%);
+  }
+
+  /* =========================================
+     FLOATING ORB
+     ========================================= */
+  .glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(80px);
+    animation: orb-float 10s ease-in-out infinite;
+  }
+
+  .glow-orb-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(201,169,97,0.08), transparent 70%);
+    top: -150px; right: -100px;
+  }
+
+  .glow-orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(200,90,23,0.05), transparent 70%);
+    bottom: 20%; left: -100px;
+    animation-delay: -5s;
+  }
+
+  @keyframes orb-float {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(15px, -20px); }
+    66% { transform: translate(-10px, 15px); }
+  }
+
+  /* =========================================
+     SCROLL REVEAL
+     ========================================= */
   .reveal {
     opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(36px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .reveal.visible {
@@ -111,8 +249,59 @@
     transform: translateY(0);
   }
 
-  .reveal-delay-1 { transition-delay: 0.1s; }
-  .reveal-delay-2 { transition-delay: 0.2s; }
-  .reveal-delay-3 { transition-delay: 0.3s; }
-  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-1 { transition-delay: 0.12s; }
+  .reveal-delay-2 { transition-delay: 0.24s; }
+  .reveal-delay-3 { transition-delay: 0.36s; }
+  .reveal-delay-4 { transition-delay: 0.48s; }
+  .reveal-delay-5 { transition-delay: 0.60s; }
+
+  /* =========================================
+     NOISE TEXTURE OVERLAY
+     ========================================= */
+  .noise-overlay::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.015;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* =========================================
+     ANIMATED LINE
+     ========================================= */
+  .animated-line {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .animated-line::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,169,97,0.4), transparent);
+  }
+
+  /* =========================================
+     COUNTER ANIMATION
+     ========================================= */
+  .stat-number {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* =========================================
+     PARALLAX BADGE
+     ========================================= */
+  .badge-float {
+    animation: badge-float 6s ease-in-out infinite;
+  }
+
+  @keyframes badge-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(2deg); }
+  }
 }
