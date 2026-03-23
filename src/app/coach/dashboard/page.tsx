@@ -43,7 +43,12 @@ export default function CoachDashboard() {
 
   return (
     <div>
-      <h1 className="font-headline font-bold text-2xl mb-1">Your Clients</h1>
+      <div className="flex items-center justify-between mb-1">
+        <h1 className="font-headline font-bold text-2xl">Your Clients</h1>
+        <Link href="/admin/clients/new" className="btn-primary !py-2.5 !px-5 !text-sm">
+          + Add Client
+        </Link>
+      </div>
       <p className="text-sm text-brand-cream/50 font-body mb-8">
         {new Date().toLocaleDateString('en', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
       </p>
