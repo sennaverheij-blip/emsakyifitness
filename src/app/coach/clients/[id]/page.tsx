@@ -31,6 +31,7 @@ export default function ClientDetail() {
   const [onboardingUrl, setOnboardingUrl] = useState<string | null>(null)
   const [plansGenerating, setPlansGenerating] = useState(false)
   const [plansGenerated, setPlansGenerated] = useState(false)
+  const [planStatus, setPlanStatus] = useState('')
   const [showPlanForm, setShowPlanForm] = useState(false)
   const [planNotes, setPlanNotes] = useState('')
   const [planWeek, setPlanWeek] = useState('1')
@@ -96,38 +97,51 @@ export default function ClientDetail() {
 
     try {
       // Generate workout first
-      alert('Generating workout plan... This takes ~20 seconds. Click OK and wait.')
+      setPlanStatus('Generating workout plan...')
       const workoutRes = await fetch('/api/generate-plans', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...body, type: 'workout' }),
       })
-      const workoutData = await workoutRes.json()
+      const workoutText = await workoutRes.text()
+      let workoutData
+      try { workoutData = JSON.parse(workoutText) } catch {
+        setPlanStatus('Error: Server returned invalid response for workout. It may have timed out. Response: ' + workoutText.substring(0, 200))
+        setPlansGenerating(false)
+        return
+      }
       if (!workoutData.success) {
-        alert('Workout error: ' + workoutData.error)
+        setPlanStatus('Workout error: ' + workoutData.error)
         setPlansGenerating(false)
         return
       }
 
       // Then generate nutrition
-      alert('Workout plan done! Now generating nutrition plan... ~20 more seconds.')
+      setPlanStatus('Workout done! Generating nutrition plan...')
       const nutritionRes = await fetch('/api/generate-plans', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...body, type: 'nutrition' }),
       })
-      const nutritionData = await nutritionRes.json()
+      const nutritionText = await nutritionRes.text()
+      let nutritionData
+      try { nutritionData = JSON.parse(nutritionText) } catch {
+        setPlanStatus('Error: Server returned invalid response for nutrition. It may have timed out. Response: ' + nutritionText.substring(0, 200))
+        setPlansGenerating(false)
+        return
+      }
       if (!nutritionData.success) {
-        alert('Nutrition error: ' + nutritionData.error)
+        setPlanStatus('Nutrition error: ' + nutritionData.error)
         setPlansGenerating(false)
         return
       }
 
       setPlansGenerated(true)
       setShowPlanForm(false)
-      alert('Both plans generated! The client can now see their workout and nutrition plans.')
-    } catch (err) {
-      alert('Failed to generate plans. Check that ANTHROPIC_API_KEY is set in Vercel.')
+      setPlanStatus('')
+      alert('Both plans generated! The client can now see them.')
+    } catch (err: any) {
+      setPlanStatus('Network error: ' + (err?.message || String(err)))
     }
     setPlansGenerating(false)
   }
@@ -227,12 +241,17 @@ export default function ClientDetail() {
               placeholder={"e.g. Focus on upper body hypertrophy this week. Client has a shoulder clicking issue — avoid overhead pressing. Increase protein to 200g. Client prefers training in the evening so structure carbs around that. No boxing."}
             />
           </div>
+          {planStatus && (
+            <div className="mb-4 p-4 bg-brand-surface rounded-lg border border-brand-slate">
+              <p className="text-sm font-body text-brand-bronze">{planStatus}</p>
+            </div>
+          )}
           <div className="flex gap-3">
             <button type="button" onClick={generatePlans} disabled={plansGenerating}
               style={{ background: 'linear-gradient(135deg, #C9A961, #D4AF37)', color: '#0A0A0A', border: 'none', padding: '12px 24px', borderRadius: '50px', fontWeight: 600, fontSize: '14px', cursor: plansGenerating ? 'wait' : 'pointer', letterSpacing: '0.5px', textTransform: 'uppercase' as const, opacity: plansGenerating ? 0.7 : 1 }}>
-              {plansGenerating ? 'Generating... (this takes ~30 seconds)' : 'Generate Plans'}
+              {plansGenerating ? 'Generating...' : 'Generate Plans'}
             </button>
-            <button type="button" onClick={() => setShowPlanForm(false)}
+            <button type="button" onClick={() => { setShowPlanForm(false); setPlanStatus('') }}
               style={{ background: 'transparent', color: '#F5F1E880', border: '1px solid #4A4A4A', padding: '12px 24px', borderRadius: '50px', fontWeight: 600, fontSize: '14px', cursor: 'pointer' }}>
               Cancel
             </button>
