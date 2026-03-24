@@ -87,25 +87,45 @@ export default function ClientDetail() {
 
   const generatePlans = async () => {
     setPlansGenerating(true)
+    const body = {
+      clientId: id,
+      week: parseInt(planWeek),
+      phase: parseInt(planPhase),
+      coachNotes: planNotes || undefined,
+    }
+
     try {
-      const res = await fetch('/api/generate-plans', {
+      // Generate workout first
+      alert('Generating workout plan... This takes ~20 seconds. Click OK and wait.')
+      const workoutRes = await fetch('/api/generate-plans', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          clientId: id,
-          week: parseInt(planWeek),
-          phase: parseInt(planPhase),
-          coachNotes: planNotes || undefined,
-        }),
+        body: JSON.stringify({ ...body, type: 'workout' }),
       })
-      const data = await res.json()
-      if (data.success) {
-        setPlansGenerated(true)
-        setShowPlanForm(false)
-        alert('Plans generated successfully! The client can now see their workout and nutrition plans.')
-      } else {
-        alert('Error: ' + (data.error || 'Failed to generate plans'))
+      const workoutData = await workoutRes.json()
+      if (!workoutData.success) {
+        alert('Workout error: ' + workoutData.error)
+        setPlansGenerating(false)
+        return
       }
+
+      // Then generate nutrition
+      alert('Workout plan done! Now generating nutrition plan... ~20 more seconds.')
+      const nutritionRes = await fetch('/api/generate-plans', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...body, type: 'nutrition' }),
+      })
+      const nutritionData = await nutritionRes.json()
+      if (!nutritionData.success) {
+        alert('Nutrition error: ' + nutritionData.error)
+        setPlansGenerating(false)
+        return
+      }
+
+      setPlansGenerated(true)
+      setShowPlanForm(false)
+      alert('Both plans generated! The client can now see their workout and nutrition plans.')
     } catch (err) {
       alert('Failed to generate plans. Check that ANTHROPIC_API_KEY is set in Vercel.')
     }
