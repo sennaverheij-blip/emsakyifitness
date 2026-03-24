@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
+import { Resend } from 'resend'
 
 // GET all clients (with coach info)
 export async function GET() {
@@ -96,6 +97,52 @@ export async function POST(req: Request) {
           tier: tier || 'elite',
         },
       })
+    }
+
+    // Send welcome email
+    if (process.env.RESEND_API_KEY) {
+      try {
+        const resend = new Resend(process.env.RESEND_API_KEY)
+        const from = process.env.EMAIL_FROM || 'The Presence Protocol <onboarding@resend.dev>'
+        const loginUrl = (process.env.NEXTAUTH_URL || 'https://emsakyifitness.vercel.app') + '/login'
+
+        await resend.emails.send({
+          from,
+          to: client.email,
+          subject: `Welcome to The Presence Protocol, ${name}`,
+          html: `
+            <div style="background:#0A0A0A;color:#F5F1E8;font-family:'Helvetica Neue',Arial,sans-serif;padding:40px 20px;max-width:600px;margin:0 auto;">
+              <div style="text-align:center;margin-bottom:32px;">
+                <h1 style="font-size:24px;font-weight:700;letter-spacing:2px;margin:0;">
+                  <span style="color:#C9A961;">EMSAKYI</span>FITNESS
+                </h1>
+                <p style="color:#C9A961;font-style:italic;margin-top:4px;font-size:14px;">The Presence Protocol</p>
+              </div>
+              <div style="background:#1A1A1A;border-left:4px solid #C9A961;border-radius:0 8px 8px 0;padding:32px;">
+                <h2 style="font-size:20px;margin:0 0 16px;">Welcome, ${name}.</h2>
+                <p style="color:#F5F1E8CC;line-height:1.7;margin:0 0 20px;">
+                  Your account has been created. Here are your login credentials:
+                </p>
+                <div style="background:#0A0A0A;border-radius:8px;padding:20px;margin-bottom:24px;">
+                  <p style="margin:0 0 8px;color:#F5F1E8AA;font-size:14px;"><strong style="color:#C9A961;">Email:</strong> ${client.email}</p>
+                  <p style="margin:0;color:#F5F1E8AA;font-size:14px;"><strong style="color:#C9A961;">Password:</strong> welcome123</p>
+                </div>
+                <p style="color:#F5F1E880;font-size:13px;margin:0 0 24px;">
+                  Please change your password after your first login.
+                </p>
+                <a href="${loginUrl}" style="display:inline-block;background:linear-gradient(135deg,#C9A961,#D4AF37);color:#0A0A0A;font-weight:700;text-decoration:none;padding:16px 32px;border-radius:50px;font-size:16px;">
+                  LOG IN TO YOUR PORTAL →
+                </a>
+              </div>
+              <div style="border-top:1px solid #2A2A2A;margin-top:32px;padding-top:20px;text-align:center;">
+                <p style="color:#F5F1E833;font-size:11px;margin:0;">© ${new Date().getFullYear()} emsakyifitness · The Presence Protocol</p>
+              </div>
+            </div>
+          `,
+        })
+      } catch (emailErr: any) {
+        console.error('[WELCOME EMAIL ERROR]', emailErr)
+      }
     }
 
     return NextResponse.json({ success: true, client })
