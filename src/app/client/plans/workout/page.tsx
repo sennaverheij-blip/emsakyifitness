@@ -1,114 +1,157 @@
 'use client'
 
-import { useState } from 'react'
-
-const demoWeek = [
-  { day: 'Monday', type: 'Upper Strength + Boxing', status: 'completed',
-    exercises: [
-      { name: 'Barbell Overhead Press', sets: 4, reps: '6-8', rest: '120s', notes: 'Controlled descent' },
-      { name: 'Weighted Pull-ups', sets: 4, reps: '6-8', rest: '120s', notes: 'Full ROM' },
-      { name: 'Incline DB Press', sets: 3, reps: '8-10', rest: '90s', notes: 'Squeeze at top' },
-      { name: 'Cable Face Pulls', sets: 3, reps: '12-15', rest: '60s', notes: 'External rotation focus' },
-      { name: 'Boxing Rounds', sets: 5, reps: '3 min', rest: '60s', notes: 'Focus on jab-cross combos' },
-    ],
-  },
-  { day: 'Tuesday', type: 'Active Recovery', status: 'scheduled', exercises: [] },
-  { day: 'Wednesday', type: 'Lower Power + Core', status: 'scheduled',
-    exercises: [
-      { name: 'Back Squat', sets: 5, reps: '5', rest: '180s', notes: 'Below parallel' },
-      { name: 'Romanian Deadlift', sets: 4, reps: '8', rest: '120s', notes: 'Hamstring stretch at bottom' },
-      { name: 'Walking Lunges', sets: 3, reps: '12/leg', rest: '90s', notes: 'Controlled pace' },
-      { name: 'Hanging Leg Raises', sets: 3, reps: '12', rest: '60s', notes: 'No swing' },
-      { name: 'Plank Variations', sets: 3, reps: '45s', rest: '45s', notes: 'Side + front' },
-    ],
-  },
-  { day: 'Thursday', type: 'Rest Day', status: 'rest', exercises: [] },
-  { day: 'Friday', type: 'Push Hypertrophy', status: 'scheduled',
-    exercises: [
-      { name: 'Flat Barbell Bench', sets: 4, reps: '8-10', rest: '120s', notes: 'Arch, retract scapula' },
-      { name: 'Seated DB Shoulder Press', sets: 4, reps: '8-10', rest: '90s', notes: 'Full lockout' },
-      { name: 'Cable Crossovers', sets: 3, reps: '12-15', rest: '60s', notes: 'Squeeze contraction' },
-      { name: 'Lateral Raises', sets: 4, reps: '12-15', rest: '45s', notes: 'Slow negative' },
-      { name: 'Tricep Dips', sets: 3, reps: '10-12', rest: '90s', notes: 'Weighted if possible' },
-    ],
-  },
-  { day: 'Saturday', type: 'Conditioning + Boxing', status: 'scheduled',
-    exercises: [
-      { name: 'Heavy Bag Work', sets: 8, reps: '2 min', rest: '30s', notes: 'Power shots' },
-      { name: 'Kettlebell Swings', sets: 4, reps: '15', rest: '45s', notes: 'Hip snap' },
-      { name: 'Battle Ropes', sets: 4, reps: '30s', rest: '30s', notes: 'Alternating' },
-      { name: 'Farmers Walk', sets: 3, reps: '40m', rest: '60s', notes: 'Heavy as possible' },
-    ],
-  },
-  { day: 'Sunday', type: 'Rest Day', status: 'rest', exercises: [] },
-]
+import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 
 export default function WorkoutPlan() {
+  const { data: session } = useSession()
+  const userId = (session?.user as any)?.id
+  const [plan, setPlan] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
   const [expanded, setExpanded] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (!userId) return
+    fetch(`/api/clients/${userId}`).then(r => r.json()).then(data => {
+      if (data.currentWorkout?.planJson) {
+        try {
+          setPlan(JSON.parse(data.currentWorkout.planJson))
+        } catch { setPlan(null) }
+      }
+      setLoading(false)
+    }).catch(() => setLoading(false))
+  }, [userId])
+
+  if (loading) {
+    return <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="bg-brand-card rounded-lg h-16 animate-pulse" />)}</div>
+  }
+
+  if (!plan) {
+    return (
+      <div className="bg-brand-card border border-brand-slate rounded-lg p-12 text-center">
+        <h2 className="font-headline font-bold text-xl mb-2">Your workout plan is being built</h2>
+        <p className="text-sm text-brand-cream/50 font-body">Your coach is preparing your personalised training protocol. Check back soon.</p>
+      </div>
+    )
+  }
+
+  const days = plan.days || []
+  const phaseLabel = plan.phase_label || `Phase ${plan.phase || 1}`
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="font-headline font-bold text-2xl">Workout Plan</h1>
-          <p className="text-sm text-brand-cream/50 font-body">Phase 2 — The Forge · Week 6</p>
+          <p className="text-sm text-brand-cream/50 font-body">{phaseLabel} · Week {plan.week || 1}</p>
         </div>
       </div>
 
-      <div className="space-y-3">
-        {demoWeek.map((day, i) => (
-          <div key={day.day} className="bg-brand-card border border-brand-slate rounded-lg overflow-hidden">
-            <button
-              onClick={() => day.exercises.length > 0 && setExpanded(expanded === i ? null : i)}
-              className="w-full flex items-center justify-between p-5 text-left"
-            >
-              <div className="flex items-center gap-4">
-                <div className={`w-2 h-2 rounded-full ${
-                  day.status === 'completed' ? 'bg-green-500' :
-                  day.status === 'rest' ? 'bg-brand-slate' : 'bg-brand-bronze'
-                }`} />
-                <div>
-                  <span className="font-headline font-semibold text-sm">{day.day}</span>
-                  <span className="text-brand-cream/50 mx-2">—</span>
-                  <span className="text-sm text-brand-cream/70 font-body">{day.type}</span>
-                </div>
-              </div>
-              {day.exercises.length > 0 && (
-                <span className={`text-brand-cream/40 transition-transform ${expanded === i ? 'rotate-180' : ''}`}>
-                  ▾
-                </span>
-              )}
-            </button>
+      {plan.weekly_notes && (
+        <div className="bg-brand-card border-l-4 border-brand-bronze rounded-r-lg p-5 mb-6">
+          <p className="text-sm font-body text-brand-cream/60">{plan.weekly_notes}</p>
+        </div>
+      )}
 
-            {expanded === i && day.exercises.length > 0 && (
-              <div className="border-t border-brand-slate p-5">
-                <table className="w-full text-sm font-body">
-                  <thead>
-                    <tr className="text-brand-cream/40 text-xs uppercase tracking-wider">
-                      <th className="text-left pb-3">Exercise</th>
-                      <th className="text-center pb-3">Sets</th>
-                      <th className="text-center pb-3">Reps</th>
-                      <th className="text-center pb-3 hidden sm:table-cell">Rest</th>
-                      <th className="text-left pb-3 hidden md:table-cell">Notes</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-brand-slate/50">
-                    {day.exercises.map((ex) => (
-                      <tr key={ex.name} className="text-brand-cream/80">
-                        <td className="py-3 pr-4 font-medium">{ex.name}</td>
-                        <td className="py-3 text-center text-brand-bronze">{ex.sets}</td>
-                        <td className="py-3 text-center">{ex.reps}</td>
-                        <td className="py-3 text-center hidden sm:table-cell text-brand-cream/50">{ex.rest}</td>
-                        <td className="py-3 hidden md:table-cell text-brand-cream/40 text-xs">{ex.notes}</td>
+      <div className="space-y-3">
+        {days.map((day: any, i: number) => {
+          const hasExercises = day.main_block && day.main_block.length > 0
+          const isRest = day.session_type?.toLowerCase().includes('rest') || day.session_type?.toLowerCase().includes('recovery')
+
+          return (
+            <div key={i} className="bg-brand-card border border-brand-slate rounded-lg overflow-hidden">
+              <button type="button"
+                onClick={() => hasExercises && setExpanded(expanded === i ? null : i)}
+                className="w-full flex items-center justify-between p-5 text-left">
+                <div className="flex items-center gap-4">
+                  <div className={`w-2 h-2 rounded-full ${isRest ? 'bg-brand-slate' : 'bg-brand-bronze'}`} />
+                  <div>
+                    <span className="font-headline font-semibold text-sm">{day.day}</span>
+                    <span className="text-brand-cream/50 mx-2">—</span>
+                    <span className="text-sm text-brand-cream/70 font-body">{day.session_type}</span>
+                    {day.duration_minutes && (
+                      <span className="text-xs text-brand-cream/30 ml-2">({day.duration_minutes} min)</span>
+                    )}
+                  </div>
+                </div>
+                {hasExercises && (
+                  <span className={`text-brand-cream/40 transition-transform ${expanded === i ? 'rotate-180' : ''}`}>▾</span>
+                )}
+              </button>
+
+              {expanded === i && hasExercises && (
+                <div className="border-t border-brand-slate p-5">
+                  {/* Warmup */}
+                  {day.warmup && day.warmup.length > 0 && (
+                    <div className="mb-4">
+                      <h4 className="text-xs text-brand-cream/40 font-headline uppercase tracking-wider mb-2">Warm-up</h4>
+                      <ul className="space-y-1">
+                        {day.warmup.map((w: string, j: number) => (
+                          <li key={j} className="text-sm text-brand-cream/50 font-body">• {w}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Main block */}
+                  <table className="w-full text-sm font-body">
+                    <thead>
+                      <tr className="text-brand-cream/40 text-xs uppercase tracking-wider">
+                        <th className="text-left pb-3">Exercise</th>
+                        <th className="text-center pb-3">Sets</th>
+                        <th className="text-center pb-3">Reps</th>
+                        <th className="text-center pb-3 hidden sm:table-cell">Rest</th>
+                        <th className="text-left pb-3 hidden md:table-cell">Notes</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        ))}
+                    </thead>
+                    <tbody className="divide-y divide-brand-slate/50">
+                      {day.main_block.map((ex: any, j: number) => (
+                        <tr key={j} className="text-brand-cream/80">
+                          <td className="py-3 pr-4 font-medium">{ex.exercise}</td>
+                          <td className="py-3 text-center text-brand-bronze">{ex.sets}</td>
+                          <td className="py-3 text-center">{ex.reps}</td>
+                          <td className="py-3 text-center hidden sm:table-cell text-brand-cream/50">{ex.rest_seconds ? `${ex.rest_seconds}s` : ex.rest || '—'}</td>
+                          <td className="py-3 hidden md:table-cell text-brand-cream/40 text-xs">{ex.notes || '—'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+
+                  {/* Finisher */}
+                  {day.finisher && day.finisher.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="text-xs text-brand-cream/40 font-headline uppercase tracking-wider mb-2">Finisher</h4>
+                      <ul className="space-y-1">
+                        {day.finisher.map((f: string, j: number) => (
+                          <li key={j} className="text-sm text-brand-cream/50 font-body">• {f}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Cooldown */}
+                  {day.cooldown && day.cooldown.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="text-xs text-brand-cream/40 font-headline uppercase tracking-wider mb-2">Cool-down</h4>
+                      <ul className="space-y-1">
+                        {day.cooldown.map((c: string, j: number) => (
+                          <li key={j} className="text-sm text-brand-cream/50 font-body">• {c}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
+
+      {plan.intensity_target && (
+        <div className="mt-6 p-4 bg-brand-surface rounded-lg border border-brand-card">
+          <p className="text-xs text-brand-cream/40 font-body"><strong className="text-brand-cream/60">Intensity target:</strong> {plan.intensity_target}</p>
+        </div>
+      )}
     </div>
   )
 }

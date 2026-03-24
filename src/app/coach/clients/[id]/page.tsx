@@ -31,6 +31,10 @@ export default function ClientDetail() {
   const [onboardingUrl, setOnboardingUrl] = useState<string | null>(null)
   const [plansGenerating, setPlansGenerating] = useState(false)
   const [plansGenerated, setPlansGenerated] = useState(false)
+  const [showPlanForm, setShowPlanForm] = useState(false)
+  const [planNotes, setPlanNotes] = useState('')
+  const [planWeek, setPlanWeek] = useState('1')
+  const [planPhase, setPlanPhase] = useState('1')
 
   useEffect(() => {
     fetch(`/api/clients/${id}`).then(r => r.json()).then(data => {
@@ -87,11 +91,17 @@ export default function ClientDetail() {
       const res = await fetch('/api/generate-plans', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ clientId: id, week: 1, phase: 1 }),
+        body: JSON.stringify({
+          clientId: id,
+          week: parseInt(planWeek),
+          phase: parseInt(planPhase),
+          coachNotes: planNotes || undefined,
+        }),
       })
       const data = await res.json()
       if (data.success) {
         setPlansGenerated(true)
+        setShowPlanForm(false)
         alert('Plans generated successfully! The client can now see their workout and nutrition plans.')
       } else {
         alert('Error: ' + (data.error || 'Failed to generate plans'))
@@ -152,9 +162,9 @@ export default function ClientDetail() {
             className="inline-flex items-center justify-center gap-2 bg-transparent text-brand-bronze font-headline font-semibold text-xs px-4 py-2.5 border-2 border-brand-bronze rounded-lg uppercase tracking-wide cursor-pointer transition-all duration-200 hover:bg-brand-bronze hover:text-brand-black">
             Message Client
           </Link>
-          <button type="button" onClick={generatePlans} disabled={plansGenerating}
+          <button type="button" onClick={() => setShowPlanForm(!showPlanForm)}
             style={{ position: 'relative', zIndex: 10, background: 'linear-gradient(135deg, #C85A17, #D4AF37)', color: '#0A0A0A', border: 'none', padding: '10px 16px', borderRadius: '8px', fontWeight: 600, fontSize: '12px', cursor: 'pointer', letterSpacing: '0.5px', textTransform: 'uppercase' as const }}>
-            {plansGenerating ? 'Generating Plans...' : plansGenerated ? 'Plans Generated ✓' : 'Generate AI Plans'}
+            {plansGenerated ? 'Plans Generated ✓' : 'Generate AI Plans'}
           </button>
           <button type="button" onClick={() => { setTab('precall'); generateAnalysis() }}
             style={{ position: 'relative', zIndex: 10, background: 'linear-gradient(135deg, #C9A961, #D4AF37)', color: '#0A0A0A', border: 'none', padding: '10px 16px', borderRadius: '8px', fontWeight: 600, fontSize: '12px', cursor: 'pointer', letterSpacing: '0.5px', textTransform: 'uppercase' as const }}>
@@ -162,6 +172,53 @@ export default function ClientDetail() {
           </button>
         </div>
       </div>
+
+      {/* Plan Generation Form */}
+      {showPlanForm && (
+        <div className="bg-brand-card border border-brand-bronze/30 rounded-lg p-6 mb-8">
+          <h3 className="font-headline font-semibold text-sm uppercase tracking-wider text-brand-bronze mb-4">Generate AI Plans</h3>
+          <div className="grid sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label className="block text-xs text-brand-cream/50 font-body mb-1.5">Week</label>
+              <select className="brand-input" value={planWeek} onChange={e => setPlanWeek(e.target.value)}>
+                {Array.from({ length: 16 }, (_, i) => (
+                  <option key={i + 1} value={String(i + 1)}>Week {i + 1}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs text-brand-cream/50 font-body mb-1.5">Phase</label>
+              <select className="brand-input" value={planPhase} onChange={e => setPlanPhase(e.target.value)}>
+                <option value="1">Phase 1 — The Audit</option>
+                <option value="2">Phase 2 — The Forge</option>
+                <option value="3">Phase 3 — The Operating System</option>
+              </select>
+            </div>
+          </div>
+          <div className="mb-4">
+            <label className="block text-xs text-brand-cream/50 font-body mb-1.5">
+              Coach Notes <span className="text-brand-cream/30">(instructions for the AI — be specific)</span>
+            </label>
+            <textarea
+              className="brand-input resize-none"
+              rows={4}
+              value={planNotes}
+              onChange={e => setPlanNotes(e.target.value)}
+              placeholder={"e.g. Focus on upper body hypertrophy this week. Client has a shoulder clicking issue — avoid overhead pressing. Increase protein to 200g. Client prefers training in the evening so structure carbs around that. No boxing."}
+            />
+          </div>
+          <div className="flex gap-3">
+            <button type="button" onClick={generatePlans} disabled={plansGenerating}
+              style={{ background: 'linear-gradient(135deg, #C9A961, #D4AF37)', color: '#0A0A0A', border: 'none', padding: '12px 24px', borderRadius: '50px', fontWeight: 600, fontSize: '14px', cursor: plansGenerating ? 'wait' : 'pointer', letterSpacing: '0.5px', textTransform: 'uppercase' as const, opacity: plansGenerating ? 0.7 : 1 }}>
+              {plansGenerating ? 'Generating... (this takes ~30 seconds)' : 'Generate Plans'}
+            </button>
+            <button type="button" onClick={() => setShowPlanForm(false)}
+              style={{ background: 'transparent', color: '#F5F1E880', border: '1px solid #4A4A4A', padding: '12px 24px', borderRadius: '50px', fontWeight: 600, fontSize: '14px', cursor: 'pointer' }}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Key Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-8">
