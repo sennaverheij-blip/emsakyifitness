@@ -29,6 +29,8 @@ export default function ClientDetail() {
   const [onboardingSending, setOnboardingSending] = useState(false)
   const [onboardingSent, setOnboardingSent] = useState(false)
   const [onboardingUrl, setOnboardingUrl] = useState<string | null>(null)
+  const [plansGenerating, setPlansGenerating] = useState(false)
+  const [plansGenerated, setPlansGenerated] = useState(false)
 
   useEffect(() => {
     fetch(`/api/clients/${id}`).then(r => r.json()).then(data => {
@@ -77,6 +79,27 @@ export default function ClientDetail() {
       alert('Failed to send onboarding form. Check console for details.')
     }
     setOnboardingSending(false)
+  }
+
+  const generatePlans = async () => {
+    setPlansGenerating(true)
+    try {
+      const res = await fetch('/api/generate-plans', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clientId: id, week: 1, phase: 1 }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setPlansGenerated(true)
+        alert('Plans generated successfully! The client can now see their workout and nutrition plans.')
+      } else {
+        alert('Error: ' + (data.error || 'Failed to generate plans'))
+      }
+    } catch (err) {
+      alert('Failed to generate plans. Check that ANTHROPIC_API_KEY is set in Vercel.')
+    }
+    setPlansGenerating(false)
   }
 
   if (loading) {
@@ -129,11 +152,12 @@ export default function ClientDetail() {
             className="inline-flex items-center justify-center gap-2 bg-transparent text-brand-bronze font-headline font-semibold text-xs px-4 py-2.5 border-2 border-brand-bronze rounded-lg uppercase tracking-wide cursor-pointer transition-all duration-200 hover:bg-brand-bronze hover:text-brand-black">
             Message Client
           </Link>
+          <button type="button" onClick={generatePlans} disabled={plansGenerating}
+            style={{ position: 'relative', zIndex: 10, background: 'linear-gradient(135deg, #C85A17, #D4AF37)', color: '#0A0A0A', border: 'none', padding: '10px 16px', borderRadius: '8px', fontWeight: 600, fontSize: '12px', cursor: 'pointer', letterSpacing: '0.5px', textTransform: 'uppercase' as const }}>
+            {plansGenerating ? 'Generating Plans...' : plansGenerated ? 'Plans Generated ✓' : 'Generate AI Plans'}
+          </button>
           <button type="button" onClick={() => { setTab('precall'); generateAnalysis() }}
-            style={{ position: 'relative', zIndex: 10 }}
-            className="inline-flex items-center justify-center gap-2 font-headline font-semibold text-xs px-4 py-2.5 rounded-lg uppercase tracking-wide cursor-pointer transition-all duration-200 text-brand-black"
-            >
-            <span style={{ background: 'linear-gradient(135deg, #C9A961, #D4AF37)', position: 'absolute', inset: 0, borderRadius: 'inherit', zIndex: -1 }} />
+            style={{ position: 'relative', zIndex: 10, background: 'linear-gradient(135deg, #C9A961, #D4AF37)', color: '#0A0A0A', border: 'none', padding: '10px 16px', borderRadius: '8px', fontWeight: 600, fontSize: '12px', cursor: 'pointer', letterSpacing: '0.5px', textTransform: 'uppercase' as const }}>
             Pre-Call Briefing
           </button>
         </div>
