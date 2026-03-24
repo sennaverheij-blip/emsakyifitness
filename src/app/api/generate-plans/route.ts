@@ -4,7 +4,7 @@ import { callClaude, PROMPTS } from '@/lib/ai'
 
 export async function POST(req: Request) {
   try {
-    const { clientId, week, phase } = await req.json()
+    const { clientId, week, phase, coachNotes } = await req.json()
 
     if (!clientId) {
       return NextResponse.json({ error: 'clientId is required' }, { status: 400 })
@@ -28,9 +28,10 @@ export async function POST(req: Request) {
     const p = phase || 1
 
     // Generate workout plan
+    const coachContext = coachNotes ? `\n\nCOACH NOTES (important — follow these instructions carefully):\n${coachNotes}` : ''
     const workoutRaw = await callClaude(
       PROMPTS.workoutPlan,
-      `Client profile: ${profile}\n\nGenerate workout plan for Week ${w}, Phase ${p}.`
+      `Client profile: ${profile}${coachContext}\n\nGenerate workout plan for Week ${w}, Phase ${p}.`
     )
 
     await prisma.workoutPlan.create({
@@ -47,7 +48,7 @@ export async function POST(req: Request) {
     // Generate nutrition plan
     const nutritionRaw = await callClaude(
       PROMPTS.nutritionPlan,
-      `Client profile: ${profile}\nCountry: ${client.country || 'unknown'}\n\nGenerate 7-day meal plan for Week ${w}.`
+      `Client profile: ${profile}\nCountry: ${client.country || 'unknown'}${coachContext}\n\nGenerate 7-day meal plan for Week ${w}.`
     )
 
     let groceryList = '{}'
