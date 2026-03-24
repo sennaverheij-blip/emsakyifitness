@@ -25,7 +25,12 @@ export async function callClaude(systemPrompt: string, userMessage: string): Pro
   }
 
   const data = await res.json()
-  return data.content[0].text
+  let text = data.content[0].text
+
+  // Strip markdown code fences if Claude wraps the JSON
+  text = text.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?```\s*$/i, '').trim()
+
+  return text
 }
 
 export const PROMPTS = {
