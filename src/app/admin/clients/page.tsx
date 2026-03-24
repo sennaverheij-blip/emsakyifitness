@@ -29,6 +29,21 @@ export default function AllClients() {
     }).catch(() => setLoading(false))
   }, [])
 
+  const deleteClient = async (id: string, name: string) => {
+    if (!confirm(`Are you sure you want to delete ${name}? This will permanently remove all their data including plans, check-ins, and progress photos.`)) return
+    try {
+      const res = await fetch(`/api/clients/${id}/delete`, { method: 'DELETE' })
+      const data = await res.json()
+      if (data.success) {
+        setClients(clients.filter(c => c.id !== id))
+      } else {
+        alert('Error: ' + (data.error || 'Failed to delete'))
+      }
+    } catch {
+      alert('Failed to delete client')
+    }
+  }
+
   const filtered = clients.filter(c =>
     (c.name || '').toLowerCase().includes(search.toLowerCase()) ||
     (c.email || '').toLowerCase().includes(search.toLowerCase())
@@ -83,6 +98,7 @@ export default function AllClients() {
                   <th className="text-center p-4 hidden lg:table-cell">Compliance</th>
                   <th className="text-center p-4 hidden sm:table-cell">Last Check-in</th>
                   <th className="text-center p-4">Status</th>
+                  <th className="text-right p-4">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-brand-slate/50">
@@ -113,6 +129,12 @@ export default function AllClients() {
                       <span className={`text-[10px] font-headline font-semibold uppercase tracking-wider px-2 py-1 rounded border ${statusColors[c.status] || statusColors['INACTIVE']}`}>
                         {c.status}
                       </span>
+                    </td>
+                    <td className="p-4 text-right">
+                      <button type="button" onClick={(e) => { e.stopPropagation(); deleteClient(c.id, c.name || c.email) }}
+                        className="text-xs text-red-400/60 hover:text-red-400 font-headline font-semibold transition-colors">
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
