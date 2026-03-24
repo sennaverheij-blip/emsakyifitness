@@ -1,18 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
 
 export default function WorkoutPlan() {
-  const { data: session } = useSession()
-  const userId = (session?.user as any)?.id
   const [plan, setPlan] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [expanded, setExpanded] = useState<number | null>(null)
 
   useEffect(() => {
-    if (!userId) return
-    fetch(`/api/clients/${userId}`).then(r => r.json()).then(data => {
+    fetch('/api/me').then(r => r.json()).then(data => {
       if (data.currentWorkout?.planJson) {
         try {
           setPlan(JSON.parse(data.currentWorkout.planJson))
@@ -20,7 +16,7 @@ export default function WorkoutPlan() {
       }
       setLoading(false)
     }).catch(() => setLoading(false))
-  }, [userId])
+  }, [])
 
   if (loading) {
     return <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="bg-brand-card rounded-lg h-16 animate-pulse" />)}</div>

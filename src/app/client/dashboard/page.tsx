@@ -1,18 +1,15 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 export default function ClientDashboard() {
-  const { data: session } = useSession()
-  const userId = (session?.user as any)?.id
-  const name = session?.user?.name || 'Athlete'
+  const [name, setName] = useState('Athlete')
   const [weekData, setWeekData] = useState<{ week: number; phase: number; phaseLabel: string } | null>(null)
 
   useEffect(() => {
-    if (!userId) return
-    fetch(`/api/clients/${userId}`).then(r => r.json()).then(data => {
+    fetch('/api/me').then(r => r.json()).then(data => {
+      if (data.name) setName(data.name)
       if (data.currentWorkout) {
         try {
           const plan = JSON.parse(data.currentWorkout.planJson)
@@ -26,7 +23,7 @@ export default function ClientDashboard() {
         }
       }
     }).catch(() => {})
-  }, [userId])
+  }, [])
 
   const week = weekData?.week || 1
   const phase = weekData?.phase || 1
