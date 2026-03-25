@@ -165,11 +165,6 @@ export default function ClientDetail() {
             className="inline-flex items-center justify-center gap-2 bg-transparent text-brand-bronze font-headline font-semibold text-xs px-4 py-2.5 border-2 border-brand-bronze rounded-lg uppercase tracking-wide cursor-pointer transition-all duration-200 hover:bg-brand-bronze hover:text-brand-black">
             {onboardingSending ? 'Sending...' : onboardingSent ? 'Sent ✓' : 'Send Onboarding Form'}
           </button>
-          <Link href="/coach/messages"
-            style={{ position: 'relative', zIndex: 10 }}
-            className="inline-flex items-center justify-center gap-2 bg-transparent text-brand-bronze font-headline font-semibold text-xs px-4 py-2.5 border-2 border-brand-bronze rounded-lg uppercase tracking-wide cursor-pointer transition-all duration-200 hover:bg-brand-bronze hover:text-brand-black">
-            Message Client
-          </Link>
           <button type="button" onClick={() => setShowPlanForm(!showPlanForm)}
             style={{ position: 'relative', zIndex: 10, background: 'linear-gradient(135deg, #C85A17, #D4AF37)', color: '#0A0A0A', border: 'none', padding: '10px 16px', borderRadius: '8px', fontWeight: 600, fontSize: '12px', cursor: 'pointer', letterSpacing: '0.5px', textTransform: 'uppercase' as const }}>
             {plansGenerated ? 'Plans Generated ✓' : 'Generate AI Plans'}

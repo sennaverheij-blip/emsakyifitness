@@ -27,8 +27,6 @@ model User {
   progressPhotos ProgressPhoto[]
   measurements   Measurement[]
   performanceLogs PerformanceLog[]
-  sentMessages     Message[] @relation("Sender")
-  receivedMessages Message[] @relation("Recipient")
   notifications Notification[]
 }
 
@@ -122,17 +120,6 @@ model PerformanceLog {
   unit     String
   notes    String?
   client User @relation(fields: [clientId], references: [id])
-}
-
-model Message {
-  id          String    @id @default(cuid())
-  senderId    String
-  recipientId String
-  content     String
-  sentAt      DateTime  @default(now())
-  readAt      DateTime?
-  sender    User @relation("Sender", fields: [senderId], references: [id])
-  recipient User @relation("Recipient", fields: [recipientId], references: [id])
 }
 
 model Notification {
