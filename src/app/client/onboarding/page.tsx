@@ -93,16 +93,30 @@ function OnboardingPage() {
 
   if (done) {
     return (
-      <div className="min-h-screen bg-brand-black flex items-center justify-center p-6">
-        <div className="text-center max-w-md">
+      <div className="min-h-screen bg-brand-black flex flex-col items-center justify-start p-6 pt-12">
+        <div className="text-center max-w-2xl w-full">
           <div className="w-16 h-16 rounded-full border-2 border-brand-bronze flex items-center justify-center mx-auto mb-6">
             <svg className="w-8 h-8 text-brand-bronze" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
           <h1 className="font-headline font-bold text-2xl mb-3">Your Protocol is Being Built</h1>
-          <p className="font-accent italic text-brand-cream/60 leading-relaxed">
-            Your onboarding is complete. Emin will review your responses and build your personalised training and nutrition protocols. You&apos;ll have access within 24 hours.
+          <p className="font-accent italic text-brand-cream/60 leading-relaxed mb-8">
+            Your onboarding is complete. Now book your onboarding call with Emin to kick things off.
           </p>
-          <p className="text-sm text-brand-cream/40 font-body mt-6">You can close this page.</p>
+
+          <div className="bg-brand-card border border-brand-slate rounded-xl overflow-hidden">
+            <div className="p-6 pb-2">
+              <p className="font-headline font-semibold mb-1">Book Your Onboarding Call</p>
+              <p className="text-sm text-brand-cream/40 mb-4">30-minute private call with Emin to go over your protocol.</p>
+            </div>
+            <iframe
+              src="https://calendly.com/admin-emsakyifitness/30min?hide_gdpr_banner=1&background_color=131313&text_color=F5F1E8&primary_color=C9A961"
+              width="100%"
+              height="650"
+              frameBorder="0"
+              title="Book Onboarding Call"
+              className="border-t border-white/5"
+            />
+          </div>
         </div>
       </div>
     )
