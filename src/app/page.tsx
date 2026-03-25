@@ -136,8 +136,8 @@ export default function FunnelPage() {
       }`}>
         <div className="max-w-[1200px] mx-auto px-6 py-4 flex items-center justify-between">
           <Image src="/assets/icon.png" alt="emsakyifitness" width={40} height={40} className="rounded" />
-          <div className="flex items-center gap-4">
-            <a href="/login" className="text-sm font-headline font-semibold text-brand-cream/50 hover:text-brand-bronze transition-colors hidden sm:inline-flex">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <a href="/login" className="text-sm font-headline font-semibold text-brand-cream/50 hover:text-brand-bronze transition-colors">
               Login
             </a>
             <button onClick={openQuiz} className="btn-primary !py-3 !px-6 !text-sm hidden sm:inline-flex">

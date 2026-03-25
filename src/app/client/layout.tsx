@@ -5,7 +5,6 @@ const clientNav = [
   { label: 'My Plans', href: '/client/plans', icon: '◆' },
   { label: 'Log Today', href: '/client/log', icon: '✎' },
   { label: 'Progress', href: '/client/progress', icon: '◉' },
-  { label: 'Messages', href: '/client/messages', icon: '✉' },
 ]
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {

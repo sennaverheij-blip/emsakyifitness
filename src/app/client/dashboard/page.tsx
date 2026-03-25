@@ -50,7 +50,6 @@ export default function ClientDashboard() {
           { label: "Log Today's Training", href: '/client/log', icon: '✎' },
           { label: "View Today's Meals", href: '/client/plans/nutrition', icon: '◆' },
           { label: 'Upload Progress Photo', href: '/client/progress', icon: '◉' },
-          { label: 'Message Coach', href: '/client/messages', icon: '✉' },
         ].map((action) => (
           <Link
             key={action.href}

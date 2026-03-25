@@ -3,7 +3,6 @@ import Sidebar from '@/components/portal/Sidebar'
 const coachNav = [
   { label: 'Dashboard', href: '/coach/dashboard', icon: '◈' },
   { label: 'Clients', href: '/coach/clients', icon: '◆' },
-  { label: 'Messages', href: '/coach/messages', icon: '✉' },
 ]
 
 export default function CoachLayout({ children }: { children: React.ReactNode }) {

@@ -12,7 +12,6 @@ export async function DELETE(_req: Request, { params }: { params: { id: string }
     await prisma.progressPhoto.deleteMany({ where: { clientId } })
     await prisma.measurement.deleteMany({ where: { clientId } })
     await prisma.performanceLog.deleteMany({ where: { clientId } })
-    await prisma.message.deleteMany({ where: { OR: [{ senderId: clientId }, { recipientId: clientId }] } })
     await prisma.notification.deleteMany({ where: { userId: clientId } })
     await prisma.onboarding.deleteMany({ where: { clientId } })
     await prisma.coachClient.deleteMany({ where: { clientId } })

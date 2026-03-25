@@ -104,12 +104,26 @@ export async function POST(req: Request) {
       try {
         const resend = new Resend(process.env.RESEND_API_KEY)
         const from = process.env.EMAIL_FROM || 'The Presence Protocol <onboarding@resend.dev>'
+        const replyTo = process.env.EMAIL_REPLY_TO || 'emin@emsakyifitness.com'
         const loginUrl = (process.env.NEXTAUTH_URL || 'https://emsakyifitness.vercel.app') + '/login'
 
         await resend.emails.send({
           from,
+          replyTo,
           to: client.email,
           subject: `Welcome to The Presence Protocol, ${name}`,
+          text: `Welcome, ${name}.
+
+Your account has been created. Here are your login credentials:
+
+Email: ${client.email}
+Password: welcome123
+
+Please change your password after your first login.
+
+Log in here: ${loginUrl}
+
+— EMSAKYI FITNESS · The Presence Protocol`,
           html: `
             <div style="background:#0A0A0A;color:#F5F1E8;font-family:'Helvetica Neue',Arial,sans-serif;padding:40px 20px;max-width:600px;margin:0 auto;">
               <div style="text-align:center;margin-bottom:32px;">

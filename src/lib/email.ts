@@ -7,12 +7,31 @@ function getResend() {
 }
 
 const FROM = process.env.EMAIL_FROM || 'The Presence Protocol <onboarding@resend.dev>'
+const REPLY_TO = process.env.EMAIL_REPLY_TO || 'emin@emsakyifitness.com'
 
 export async function sendOnboardingEmail(to: string, clientName: string, onboardingUrl: string) {
   return getResend().emails.send({
     from: FROM,
+    replyTo: REPLY_TO,
     to,
     subject: `Your Presence Protocol begins here, ${clientName}`,
+    text: `Welcome, ${clientName}.
+
+Your transformation starts now. Before we build your personalised protocol, we need to understand exactly where you are — physically, mentally, and in your lifestyle.
+
+Complete the onboarding form below. It takes about 15 minutes. Be honest — the more we know, the better your protocol will be.
+
+Complete your onboarding: ${onboardingUrl}
+
+What happens next:
+1. Complete the onboarding form (15 min)
+2. Emin reviews your responses personally
+3. Your bespoke training & nutrition plans are built
+4. You receive access to the portal within 24 hours
+
+Please complete this within 48 hours. If you have questions, reply to this email.
+
+— EMSAKYI FITNESS · The Presence Protocol`,
     html: `
       <div style="background:#0A0A0A;color:#F5F1E8;font-family:'Helvetica Neue',Arial,sans-serif;padding:40px 20px;max-width:600px;margin:0 auto;">
         <div style="text-align:center;margin-bottom:32px;">
@@ -60,8 +79,16 @@ export async function sendOnboardingEmail(to: string, clientName: string, onboar
 export async function sendPlanReadyEmail(to: string, clientName: string, loginUrl: string) {
   return getResend().emails.send({
     from: FROM,
+    replyTo: REPLY_TO,
     to,
-    subject: `Your protocol is ready. ${clientName}, enter the system.`,
+    subject: `Your protocol is ready, ${clientName}`,
+    text: `Your protocol is live, ${clientName}.
+
+Your personalised training and nutrition plans are ready. Log in to the portal to see your full protocol.
+
+Log in here: ${loginUrl}
+
+— EMSAKYI FITNESS · The Presence Protocol`,
     html: `
       <div style="background:#0A0A0A;color:#F5F1E8;font-family:'Helvetica Neue',Arial,sans-serif;padding:40px 20px;max-width:600px;margin:0 auto;">
         <div style="text-align:center;margin-bottom:32px;">
@@ -89,8 +116,18 @@ export async function sendPlanReadyEmail(to: string, clientName: string, loginUr
 export async function sendCheckInReminder(to: string, clientName: string, logUrl: string) {
   return getResend().emails.send({
     from: FROM,
+    replyTo: REPLY_TO,
     to,
-    subject: `Quick check-in — 5 minutes, ${clientName}`,
+    subject: `Quick check-in, ${clientName}`,
+    text: `Hey ${clientName},
+
+We haven't heard from you today. A quick check-in keeps your coach informed and your momentum going.
+
+Log your check-in here: ${logUrl}
+
+Takes less than 5 minutes.
+
+— EMSAKYI FITNESS · The Presence Protocol`,
     html: `
       <div style="background:#0A0A0A;color:#F5F1E8;font-family:'Helvetica Neue',Arial,sans-serif;padding:40px 20px;max-width:600px;margin:0 auto;">
         <div style="text-align:center;margin-bottom:24px;">
