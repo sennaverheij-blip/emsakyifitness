@@ -75,7 +75,14 @@ export default function ClientDetail() {
       if (data.success) {
         setOnboardingSent(true)
         setOnboardingUrl(data.onboardingUrl)
-        alert(`Onboarding email sent to ${data.message?.split('to ')[1] || 'client'}`)
+        const emailInfo = data.emailResult?.error
+          ? `(email error: ${data.emailResult.error})`
+          : data.emailResult?.skipped
+          ? '(email skipped: API key not set)'
+          : data.emailResult?.data?.id
+          ? `(email ID: ${data.emailResult.data.id})`
+          : ''
+        alert(`Onboarding sent to ${data.message?.split('to ')[1] || 'client'} ${emailInfo}`)
       } else {
         alert('Error: ' + (data.error || 'Unknown error'))
       }
