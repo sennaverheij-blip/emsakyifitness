@@ -71,6 +71,22 @@ export default function ClientDashboard() {
           Check your <Link href="/client/plans/workout" className="text-brand-bronze hover:text-brand-gold">Workout Plan</Link> and <Link href="/client/plans/nutrition" className="text-brand-bronze hover:text-brand-gold">Nutrition Plan</Link> for today&apos;s schedule.
         </p>
       </div>
+
+      {/* Check-in call */}
+      <div className="bg-brand-card border border-brand-slate rounded-lg p-6 mb-8">
+        <h3 className="font-headline font-semibold text-sm uppercase tracking-wider text-brand-bronze mb-2">Weekly Check-In</h3>
+        <p className="font-body text-brand-cream/70 text-sm mb-4">
+          Book your weekly check-in call with Emin to review progress and adjust your protocol.
+        </p>
+        <a
+          href="https://calendly.com/admin-emsakyifitness/check-in-call"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-primary !py-3 !px-6 !text-sm inline-flex"
+        >
+          Book Check-In Call →
+        </a>
+      </div>
     </div>
   )
 }
