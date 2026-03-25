@@ -86,60 +86,34 @@ export default function ClientDetail() {
     setOnboardingSending(false)
   }
 
-  const generatePlans = async () => {
+  const generatePlan = async (planType: 'workout' | 'nutrition') => {
     setPlansGenerating(true)
-    const body = {
-      clientId: id,
-      week: parseInt(planWeek),
-      phase: parseInt(planPhase),
-      coachNotes: planNotes || undefined,
-    }
+    setPlanStatus(`Generating ${planType} plan... This takes ~20 seconds.`)
 
     try {
-      // Generate workout first
-      setPlanStatus('Generating workout plan...')
-      const workoutRes = await fetch('/api/generate-plans', {
+      const res = await fetch('/api/generate-plans', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...body, type: 'workout' }),
+        body: JSON.stringify({
+          clientId: id,
+          week: parseInt(planWeek),
+          phase: parseInt(planPhase),
+          coachNotes: planNotes || undefined,
+          type: planType,
+        }),
       })
-      const workoutText = await workoutRes.text()
-      let workoutData
-      try { workoutData = JSON.parse(workoutText) } catch {
-        setPlanStatus('Error: Server returned invalid response for workout. It may have timed out. Response: ' + workoutText.substring(0, 200))
+      const text = await res.text()
+      let data
+      try { data = JSON.parse(text) } catch {
+        setPlanStatus(`Error: Server returned invalid response. It may have timed out.\n${text.substring(0, 200)}`)
         setPlansGenerating(false)
         return
       }
-      if (!workoutData.success) {
-        setPlanStatus('Workout error: ' + workoutData.error)
-        setPlansGenerating(false)
-        return
+      if (data.success) {
+        setPlanStatus(`${planType.charAt(0).toUpperCase() + planType.slice(1)} plan generated successfully!`)
+      } else {
+        setPlanStatus(`Error: ${data.error}`)
       }
-
-      // Then generate nutrition
-      setPlanStatus('Workout done! Generating nutrition plan...')
-      const nutritionRes = await fetch('/api/generate-plans', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...body, type: 'nutrition' }),
-      })
-      const nutritionText = await nutritionRes.text()
-      let nutritionData
-      try { nutritionData = JSON.parse(nutritionText) } catch {
-        setPlanStatus('Error: Server returned invalid response for nutrition. It may have timed out. Response: ' + nutritionText.substring(0, 200))
-        setPlansGenerating(false)
-        return
-      }
-      if (!nutritionData.success) {
-        setPlanStatus('Nutrition error: ' + nutritionData.error)
-        setPlansGenerating(false)
-        return
-      }
-
-      setPlansGenerated(true)
-      setShowPlanForm(false)
-      setPlanStatus('')
-      alert('Both plans generated! The client can now see them.')
     } catch (err: any) {
       setPlanStatus('Network error: ' + (err?.message || String(err)))
     }
@@ -246,10 +220,14 @@ export default function ClientDetail() {
               <p className="text-sm font-body text-brand-bronze">{planStatus}</p>
             </div>
           )}
-          <div className="flex gap-3">
-            <button type="button" onClick={generatePlans} disabled={plansGenerating}
+          <div className="flex flex-wrap gap-3">
+            <button type="button" onClick={() => generatePlan('workout')} disabled={plansGenerating}
               style={{ background: 'linear-gradient(135deg, #C9A961, #D4AF37)', color: '#0A0A0A', border: 'none', padding: '12px 24px', borderRadius: '50px', fontWeight: 600, fontSize: '14px', cursor: plansGenerating ? 'wait' : 'pointer', letterSpacing: '0.5px', textTransform: 'uppercase' as const, opacity: plansGenerating ? 0.7 : 1 }}>
-              {plansGenerating ? 'Generating...' : 'Generate Plans'}
+              {plansGenerating ? 'Generating...' : 'Generate Workout Plan'}
+            </button>
+            <button type="button" onClick={() => generatePlan('nutrition')} disabled={plansGenerating}
+              style={{ background: 'linear-gradient(135deg, #C85A17, #D4AF37)', color: '#0A0A0A', border: 'none', padding: '12px 24px', borderRadius: '50px', fontWeight: 600, fontSize: '14px', cursor: plansGenerating ? 'wait' : 'pointer', letterSpacing: '0.5px', textTransform: 'uppercase' as const, opacity: plansGenerating ? 0.7 : 1 }}>
+              {plansGenerating ? 'Generating...' : 'Generate Nutrition Plan'}
             </button>
             <button type="button" onClick={() => { setShowPlanForm(false); setPlanStatus('') }}
               style={{ background: 'transparent', color: '#F5F1E880', border: '1px solid #4A4A4A', padding: '12px 24px', borderRadius: '50px', fontWeight: 600, fontSize: '14px', cursor: 'pointer' }}>
