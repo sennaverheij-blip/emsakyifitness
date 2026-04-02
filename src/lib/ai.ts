@@ -30,6 +30,10 @@ export async function callClaude(systemPrompt: string, userMessage: string): Pro
   // Strip markdown code fences if Claude wraps the JSON
   text = text.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?```\s*$/i, '').trim()
 
+  // Remove any leading/trailing non-JSON text (e.g. "Here is the plan:")
+  const jsonMatch = text.match(/[\[{][\s\S]*[\]}]/)
+  if (jsonMatch) text = jsonMatch[0]
+
   return text
 }
 
