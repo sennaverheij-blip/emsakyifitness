@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { callClaude, PROMPTS } from '@/lib/ai'
 import { prisma } from '@/lib/prisma'
 
-export const maxDuration = 60
+export const maxDuration = 300
 
 export async function POST(req: Request) {
   try {
