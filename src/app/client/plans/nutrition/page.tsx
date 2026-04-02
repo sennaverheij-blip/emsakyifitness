@@ -15,8 +15,14 @@ export default function NutritionPlan() {
     fetch('/api/me').then(r => r.json()).then(data => {
       if (data.currentNutrition?.planJson) {
         try {
-          setPlan(JSON.parse(data.currentNutrition.planJson))
-        } catch { setPlan(null) }
+          let raw = data.currentNutrition.planJson
+          const jsonMatch = raw.match(/\{[\s\S]*\}/)
+          if (jsonMatch) raw = jsonMatch[0]
+          setPlan(JSON.parse(raw))
+        } catch {
+          console.error('Failed to parse nutrition plan JSON:', data.currentNutrition.planJson?.substring(0, 500))
+          setPlan(null)
+        }
       }
       setLoading(false)
     }).catch(() => setLoading(false))

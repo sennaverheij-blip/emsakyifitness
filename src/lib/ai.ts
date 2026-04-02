@@ -13,7 +13,7 @@ export async function callClaude(systemPrompt: string, userMessage: string): Pro
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-6',
-      max_tokens: 4096,
+      max_tokens: 8000,
       system: systemPrompt,
       messages: [{ role: 'user', content: userMessage }],
     }),
@@ -105,7 +105,9 @@ Philosophy:
 - Culturally appropriate for the client's location
 - Adaptable to budget constraints
 
-Generate a 7-day meal plan. Output ONLY valid JSON (no markdown, no code fences):
+Generate a 7-day meal plan. Output ONLY valid JSON (no markdown, no code fences, no extra text).
+IMPORTANT: Keep output compact. Use short ingredient descriptions. Max 3 meals per day.
+
 {
   "week": X,
   "daily_targets": { "calories": X, "protein_g": X, "carbs_g": X, "fats_g": X },
@@ -116,11 +118,8 @@ Generate a 7-day meal plan. Output ONLY valid JSON (no markdown, no code fences)
         {
           "meal_type": "Breakfast",
           "name": "...",
-          "ingredients": [{ "item": "...", "amount": "...", "unit": "g" }],
-          "prep_instructions": "...",
-          "macros": { "calories": X, "protein": X, "carbs": X, "fats": X },
-          "prep_time_minutes": X,
-          "budget_friendly_swap": "..."
+          "ingredients": ["200g chicken breast", "100g rice"],
+          "macros": { "calories": X, "protein": X, "carbs": X, "fats": X }
         }
       ]
     }
@@ -134,7 +133,8 @@ Constraints:
 - Use locally available ingredients for the client's country
 - Adapt to budget and cooking ability
 - Higher carbs on training days, lower on rest
-- Keep meals practical — max 4 meals per day`,
+- Max 3 meals per day to keep output compact
+- Ingredients as simple strings with amount included (e.g. "200g chicken breast")`,
 
   mealSwap: `Suggest 3 alternative meals matching the same macros (within 10% tolerance). Output ONLY a JSON array of meal objects. No markdown.`,
 
