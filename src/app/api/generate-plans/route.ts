@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { callClaude, PROMPTS } from '@/lib/ai'
 
-// Allow up to 60 seconds for AI generation (requires Vercel Pro)
-export const maxDuration = 60
+// Allow up to 300 seconds for AI generation (requires Vercel Pro)
+export const maxDuration = 300
 export const dynamic = 'force-dynamic'
 
 export async function POST(req: Request) {
