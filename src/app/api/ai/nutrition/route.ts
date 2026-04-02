@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { callClaude, PROMPTS } from '@/lib/ai'
 import { prisma } from '@/lib/prisma'
 
+export const maxDuration = 60
+
 export async function POST(req: Request) {
   try {
     const { clientId, week } = await req.json()
