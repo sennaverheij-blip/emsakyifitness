@@ -6,13 +6,23 @@ export default function WorkoutPlan() {
   const [plan, setPlan] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [expanded, setExpanded] = useState<number | null>(null)
+  const [parseError, setParseError] = useState(false)
 
   useEffect(() => {
     fetch('/api/me').then(r => r.json()).then(data => {
       if (data.currentWorkout?.planJson) {
         try {
-          setPlan(JSON.parse(data.currentWorkout.planJson))
-        } catch { setPlan(null) }
+          const raw = data.currentWorkout.planJson
+          // Try to extract JSON if wrapped in extra text
+          let jsonStr = raw
+          const jsonMatch = raw.match(/\{[\s\S]*\}/)
+          if (jsonMatch) jsonStr = jsonMatch[0]
+          setPlan(JSON.parse(jsonStr))
+        } catch {
+          console.error('Failed to parse workout plan JSON:', data.currentWorkout.planJson?.substring(0, 500))
+          setParseError(true)
+          setPlan(null)
+        }
       }
       setLoading(false)
     }).catch(() => setLoading(false))

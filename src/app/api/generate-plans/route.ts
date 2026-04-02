@@ -35,10 +35,20 @@ export async function POST(req: Request) {
     const generateType = type || 'both'
 
     if (generateType === 'workout' || generateType === 'both') {
-      const workoutRaw = await callClaude(
+      let workoutRaw = await callClaude(
         PROMPTS.workoutPlan,
         `Client profile: ${profile}${coachContext}\n\nGenerate workout plan for Week ${w}, Phase ${p}.`
       )
+
+      // Validate and clean JSON before saving
+      try {
+        const jsonMatch = workoutRaw.match(/\{[\s\S]*\}/)
+        if (jsonMatch) workoutRaw = jsonMatch[0]
+        JSON.parse(workoutRaw) // validate it's parseable
+      } catch {
+        console.error('[GENERATE-PLANS] Invalid workout JSON from AI:', workoutRaw.substring(0, 500))
+        return NextResponse.json({ error: 'AI returned invalid JSON for workout plan. Please try again.' }, { status: 500 })
+      }
 
       await prisma.workoutPlan.create({
         data: {
@@ -53,16 +63,23 @@ export async function POST(req: Request) {
     }
 
     if (generateType === 'nutrition' || generateType === 'both') {
-      const nutritionRaw = await callClaude(
+      let nutritionRaw = await callClaude(
         PROMPTS.nutritionPlan,
         `Client profile: ${profile}\nCountry: ${client.country || 'unknown'}${coachContext}\n\nGenerate 7-day meal plan for Week ${w}.`
       )
 
-      let groceryList = '{}'
+      // Validate and clean JSON before saving
+      let parsed
       try {
-        const parsed = JSON.parse(nutritionRaw)
-        if (parsed.grocery_list) groceryList = JSON.stringify(parsed.grocery_list)
-      } catch {}
+        const jsonMatch = nutritionRaw.match(/\{[\s\S]*\}/)
+        if (jsonMatch) nutritionRaw = jsonMatch[0]
+        parsed = JSON.parse(nutritionRaw)
+      } catch {
+        console.error('[GENERATE-PLANS] Invalid nutrition JSON from AI:', nutritionRaw.substring(0, 500))
+        return NextResponse.json({ error: 'AI returned invalid JSON for nutrition plan. Please try again.' }, { status: 500 })
+      }
+
+      const groceryList = parsed.grocery_list ? JSON.stringify(parsed.grocery_list) : '{}'
 
       await prisma.nutritionPlan.create({
         data: {
