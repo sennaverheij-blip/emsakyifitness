@@ -97,7 +97,7 @@ export default function DailyLog() {
       <input
         type="range" min={min} max={max} value={value}
         onChange={(e) => onChange(+e.target.value)}
-        className="w-full h-1.5 bg-brand-surface rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-brand-bronze [&::-webkit-slider-thumb]:cursor-pointer"
+        className="w-full h-1.5 bg-white/[0.04] rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-brand-bronze [&::-webkit-slider-thumb]:cursor-pointer"
       />
       {(lowLabel || highLabel) && (
         <div className="flex justify-between text-[10px] text-brand-cream/30 mt-1">
@@ -142,7 +142,7 @@ export default function DailyLog() {
       {/* Tabs */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-headline font-bold text-2xl">Daily Tracker</h1>
-        <div className="flex bg-brand-surface rounded-lg p-0.5">
+        <div className="flex bg-white/[0.04] rounded-lg p-0.5">
           {(['log', 'history'] as const).map((t) => (
             <button key={t} onClick={() => setTab(t)}
               className={`px-4 py-2 text-xs font-headline font-semibold uppercase tracking-wider rounded-md transition-all ${
@@ -165,7 +165,7 @@ export default function DailyLog() {
           <form onSubmit={handleSubmit} className="space-y-8">
 
             {/* ── Date & Weight ── */}
-            <section className="bg-brand-card border border-brand-slate rounded-lg p-5">
+            <section className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
               <h2 className="font-headline font-semibold text-xs uppercase tracking-wider text-brand-bronze mb-4">Date & Body Weight</h2>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -187,7 +187,7 @@ export default function DailyLog() {
             </section>
 
             {/* ── Activity ── */}
-            <section className="bg-brand-card border border-brand-slate rounded-lg p-5">
+            <section className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
               <h2 className="font-headline font-semibold text-xs uppercase tracking-wider text-brand-bronze mb-4">Activity</h2>
               <div className="space-y-4">
                 <div>
@@ -206,7 +206,7 @@ export default function DailyLog() {
             </section>
 
             {/* ── Sleep ── */}
-            <section className="bg-brand-card border border-brand-slate rounded-lg p-5">
+            <section className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
               <h2 className="font-headline font-semibold text-xs uppercase tracking-wider text-brand-bronze mb-4">Sleep</h2>
               <div className="space-y-4">
                 <div>
@@ -223,7 +223,7 @@ export default function DailyLog() {
             </section>
 
             {/* ── Nutrition ── */}
-            <section className="bg-brand-card border border-brand-slate rounded-lg p-5">
+            <section className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
               <h2 className="font-headline font-semibold text-xs uppercase tracking-wider text-brand-bronze mb-4">Nutrition</h2>
               <div className="space-y-4">
                 <div>
@@ -234,7 +234,7 @@ export default function DailyLog() {
                         className={`px-4 py-2 rounded-lg text-sm font-body capitalize transition-all ${
                           nutritionCompliance === val
                             ? 'bg-brand-bronze/10 border border-brand-bronze text-brand-bronze'
-                            : 'bg-brand-surface border border-brand-slate text-brand-cream/50 hover:text-brand-cream/70'
+                            : 'bg-white/[0.04] border border-white/[0.06] text-brand-cream/50 hover:text-brand-cream/70'
                         }`}>
                         {val === 'off-plan' ? 'Off-plan' : val}
                       </button>
@@ -256,7 +256,7 @@ export default function DailyLog() {
             </section>
 
             {/* ── Workout ── */}
-            <section className="bg-brand-card border border-brand-slate rounded-lg p-5">
+            <section className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
               <h2 className="font-headline font-semibold text-xs uppercase tracking-wider text-brand-bronze mb-4">Workout</h2>
               <div className="space-y-4">
                 <div>
@@ -267,7 +267,7 @@ export default function DailyLog() {
                         className={`px-6 py-2.5 rounded-lg font-body text-sm transition-all ${
                           trained === val
                             ? 'bg-brand-bronze/10 border border-brand-bronze text-brand-bronze'
-                            : 'bg-brand-surface border border-brand-slate text-brand-cream/50'
+                            : 'bg-white/[0.04] border border-white/[0.06] text-brand-cream/50'
                         }`}>
                         {val ? 'Yes, I trained' : 'Rest day'}
                       </button>
@@ -294,7 +294,7 @@ export default function DailyLog() {
             </section>
 
             {/* ── Energy & Mood ── */}
-            <section className="bg-brand-card border border-brand-slate rounded-lg p-5">
+            <section className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
               <h2 className="font-headline font-semibold text-xs uppercase tracking-wider text-brand-bronze mb-4">Energy & Mood</h2>
               <div className="space-y-5">
                 <SliderField label="Energy Level" value={energy} onChange={setEnergy}
@@ -307,7 +307,7 @@ export default function DailyLog() {
             </section>
 
             {/* ── Daily Comments ── */}
-            <section className="bg-brand-card border border-brand-slate rounded-lg p-5">
+            <section className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
               <h2 className="font-headline font-semibold text-xs uppercase tracking-wider text-brand-bronze mb-4">Daily Comments</h2>
               <textarea
                 value={notes} onChange={(e) => setNotes(e.target.value)}
@@ -327,16 +327,16 @@ export default function DailyLog() {
         <div>
           {historyLoading ? (
             <div className="space-y-3">
-              {[1,2,3].map(i => <div key={i} className="bg-brand-card border border-brand-slate rounded-lg p-6 animate-pulse h-24" />)}
+              {[1,2,3].map(i => <div key={i} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6 animate-pulse h-24" />)}
             </div>
           ) : history.length === 0 ? (
-            <div className="bg-brand-card border border-brand-slate rounded-lg p-12 text-center">
+            <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-12 text-center">
               <p className="text-brand-cream/40 font-body text-sm">No logs yet. Start tracking today!</p>
             </div>
           ) : (
             <div className="space-y-4">
               {history.map((ci) => (
-                <div key={ci.id} className="bg-brand-card border border-brand-slate rounded-lg p-5">
+                <div key={ci.id} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
                   {/* Header */}
                   <div className="flex items-center justify-between mb-4">
                     <span className="font-headline font-semibold text-sm">
@@ -396,7 +396,7 @@ export default function DailyLog() {
                   )}
 
                   {ci.notes && (
-                    <p className="mt-3 text-sm text-brand-cream/50 font-body italic border-t border-brand-slate/50 pt-3">
+                    <p className="mt-3 text-sm text-brand-cream/50 font-body italic border-t border-white/[0.06]/50 pt-3">
                       &ldquo;{ci.notes}&rdquo;
                     </p>
                   )}
@@ -412,7 +412,7 @@ export default function DailyLog() {
 
 function MetricBadge({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
-    <div className="bg-brand-surface rounded-lg px-2.5 py-2 text-center">
+    <div className="bg-white/[0.04] rounded-lg px-2.5 py-2 text-center">
       <div className="text-xs font-headline font-bold text-brand-bronze">{value}</div>
       <div className="text-[9px] text-brand-cream/40 font-body uppercase tracking-wider">{label}</div>
       {sub && <div className="text-[9px] text-brand-cream/30">{sub}</div>}

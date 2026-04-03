@@ -58,7 +58,7 @@ export default function PasswordChange() {
   }
 
   return (
-    <div className="bg-brand-card border border-brand-slate rounded-lg p-6">
+    <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6">
       <h2 className="font-headline font-semibold text-sm uppercase tracking-wider text-brand-cream/60 mb-4">Change Password</h2>
       <div className="space-y-3">
         <div>

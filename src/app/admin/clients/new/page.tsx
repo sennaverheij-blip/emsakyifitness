@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import PageWrapper from '@/components/portal/PageWrapper'
+import { motion } from 'framer-motion'
 
 export default function AddClientPage() {
   const router = useRouter()
@@ -29,7 +31,6 @@ export default function AddClientPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, country, coachId: coachId || undefined, tier }),
     })
-
     const data = await res.json()
 
     if (!res.ok) {
@@ -44,82 +45,80 @@ export default function AddClientPage() {
 
   if (success) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
-        <div className="w-16 h-16 rounded-full border-2 border-brand-bronze flex items-center justify-center mb-6">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="flex flex-col items-center justify-center min-h-[50vh] text-center"
+      >
+        <div className="w-16 h-16 rounded-full bg-brand-bronze/[0.08] border border-brand-bronze/20 flex items-center justify-center mb-6">
           <svg className="w-8 h-8 text-brand-bronze" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
         <h2 className="font-headline font-bold text-2xl mb-2">Client Created</h2>
-        <p className="text-sm text-brand-cream/50 font-body">
-          {name} has been added. Temporary password: <strong className="text-brand-cream">welcome123</strong>
+        <p className="text-sm text-brand-cream/40 font-body">
+          {name} has been added. Temporary password: <strong className="text-brand-cream/70">welcome123</strong>
         </p>
-      </div>
+      </motion.div>
     )
   }
 
   return (
-    <div className="max-w-lg">
-      <h1 className="font-headline font-bold text-2xl mb-2">Add New Client</h1>
-      <p className="text-sm text-brand-cream/50 font-body mb-8">Create a client account. They&apos;ll receive a temporary password to log in.</p>
+    <PageWrapper>
+      <div className="max-w-lg">
+        <h1 className="font-headline font-bold text-2xl mb-2">Add New Client</h1>
+        <p className="text-sm text-brand-cream/30 font-body mb-8">Create a client account. They&apos;ll receive a temporary password to log in.</p>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div>
-          <label className="block text-xs text-brand-cream/50 font-body mb-1.5">Full Name *</label>
-          <input className="brand-input" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Sarah Johnson" required />
-        </div>
-
-        <div>
-          <label className="block text-xs text-brand-cream/50 font-body mb-1.5">Email Address *</label>
-          <input className="brand-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="client@email.com" required />
-        </div>
-
-        <div>
-          <label className="block text-xs text-brand-cream/50 font-body mb-1.5">Country</label>
-          <input className="brand-input" value={country} onChange={(e) => setCountry(e.target.value)} placeholder="e.g. Netherlands" />
-        </div>
-
-        <div>
-          <label className="block text-xs text-brand-cream/50 font-body mb-1.5">Assign to Coach</label>
-          <select className="brand-input" value={coachId} onChange={(e) => setCoachId(e.target.value)}>
-            <option value="">Unassigned</option>
-            {coaches.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-xs text-brand-cream/50 font-body mb-1.5">Tier</label>
-          <div className="flex gap-3">
-            {['elite', 'community'].map((t) => (
-              <button key={t} type="button" onClick={() => setTier(t)}
-                className={`px-5 py-2.5 rounded-full text-sm font-headline font-semibold capitalize transition-all ${
-                  tier === t
-                    ? 'bg-brand-bronze/10 border border-brand-bronze text-brand-bronze'
-                    : 'bg-brand-surface border border-brand-slate text-brand-cream/50'
-                }`}>
-                {t}
-              </button>
-            ))}
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block text-xs text-brand-cream/40 font-body mb-1.5">Full Name *</label>
+            <input className="brand-input" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Sarah Johnson" required />
           </div>
+          <div>
+            <label className="block text-xs text-brand-cream/40 font-body mb-1.5">Email Address *</label>
+            <input className="brand-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="client@email.com" required />
+          </div>
+          <div>
+            <label className="block text-xs text-brand-cream/40 font-body mb-1.5">Country</label>
+            <input className="brand-input" value={country} onChange={(e) => setCountry(e.target.value)} placeholder="e.g. Netherlands" />
+          </div>
+          <div>
+            <label className="block text-xs text-brand-cream/40 font-body mb-1.5">Assign to Coach</label>
+            <select className="brand-input" value={coachId} onChange={(e) => setCoachId(e.target.value)}>
+              <option value="">Unassigned</option>
+              {coaches.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs text-brand-cream/40 font-body mb-1.5">Tier</label>
+            <div className="flex gap-3">
+              {['elite', 'community'].map((t) => (
+                <button key={t} type="button" onClick={() => setTier(t)}
+                  className={`px-5 py-2.5 rounded-xl text-sm font-headline font-semibold capitalize transition-all duration-200 ${
+                    tier === t
+                      ? 'bg-brand-bronze/[0.08] border border-brand-bronze/30 text-brand-bronze'
+                      : 'bg-white/[0.02] border border-white/[0.06] text-brand-cream/40 hover:text-brand-cream/60'
+                  }`}>
+                  {t}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {error && <p className="text-sm text-red-400 font-body">{error}</p>}
+
+          <div className="flex gap-3 pt-2">
+            <button type="submit" disabled={loading} className="btn-primary flex-1">
+              {loading ? 'Creating...' : 'Create Client'}
+            </button>
+            <button type="button" onClick={() => router.back()} className="btn-secondary">Cancel</button>
+          </div>
+        </form>
+
+        <div className="mt-6 p-4 bg-white/[0.02] rounded-xl border border-white/[0.06]">
+          <p className="text-xs text-brand-cream/30 font-body">
+            The client will be created with temporary password <strong className="text-brand-cream/50">welcome123</strong>. Share the login URL and credentials with them.
+          </p>
         </div>
-
-        {error && <p className="text-sm text-red-400 font-body">{error}</p>}
-
-        <div className="flex gap-3 pt-2">
-          <button type="submit" disabled={loading} className="btn-primary flex-1">
-            {loading ? 'Creating...' : 'Create Client'}
-          </button>
-          <button type="button" onClick={() => router.back()} className="btn-secondary">
-            Cancel
-          </button>
-        </div>
-      </form>
-
-      <div className="mt-6 p-4 bg-brand-surface rounded-lg border border-brand-card">
-        <p className="text-xs text-brand-cream/40 font-body">
-          The client will be created with temporary password <strong className="text-brand-cream/60">welcome123</strong>. Share the login URL and credentials with them.
-        </p>
       </div>
-    </div>
+    </PageWrapper>
   )
 }

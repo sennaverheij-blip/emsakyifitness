@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
+import PageWrapper from '@/components/portal/PageWrapper'
 
 type ClientData = {
   id: string; name: string; email: string; country: string | null;
@@ -130,8 +131,8 @@ export default function ClientDetail() {
   if (loading) {
     return (
       <div className="space-y-4">
-        <div className="bg-brand-card border border-brand-slate rounded-lg p-8 animate-pulse h-24" />
-        <div className="bg-brand-card border border-brand-slate rounded-lg p-8 animate-pulse h-48" />
+        <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-8 animate-pulse h-24" />
+        <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-8 animate-pulse h-48" />
       </div>
     )
   }
@@ -148,7 +149,7 @@ export default function ClientDetail() {
   const s = client.stats
 
   return (
-    <div>
+    <PageWrapper>
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div className="flex items-center gap-4">
@@ -161,7 +162,7 @@ export default function ClientDetail() {
               <span className="text-xs text-brand-cream/40 font-body">{client.email}</span>
               {client.country && <span className="text-xs text-brand-cream/30">· {client.country}</span>}
               <span className={`text-[10px] font-headline font-semibold uppercase tracking-wider px-2 py-0.5 rounded ${
-                client.tier === 'elite' ? 'bg-brand-bronze/10 text-brand-bronze border border-brand-bronze/30' : 'bg-brand-surface text-brand-cream/50 border border-brand-slate'
+                client.tier === 'elite' ? 'bg-brand-bronze/10 text-brand-bronze border border-brand-bronze/30' : 'bg-white/[0.03] text-brand-cream/50 border border-white/[0.06]'
               }`}>{client.tier}</span>
             </div>
           </div>
@@ -218,7 +219,7 @@ export default function ClientDetail() {
             />
           </div>
           {planStatus && (
-            <div className="mb-4 p-4 bg-brand-surface rounded-lg border border-brand-slate">
+            <div className="mb-4 p-4 bg-white/[0.03] rounded-lg border border-white/[0.06]">
               <p className="text-sm font-body text-brand-bronze">{planStatus}</p>
             </div>
           )}
@@ -250,7 +251,7 @@ export default function ClientDetail() {
           { label: 'Streak', value: `${s.streakDays}`, sub: 'days' },
           { label: 'Check-ins', value: `${s.totalCheckIns}`, sub: 'last 7d' },
         ].map((stat) => (
-          <div key={stat.label} className="bg-brand-card border border-brand-slate rounded-lg p-3 text-center">
+          <div key={stat.label} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-3 text-center">
             <div className="font-headline font-bold text-lg text-brand-bronze">{stat.value}</div>
             <div className="text-[10px] text-brand-cream/40 font-body uppercase tracking-wider">{stat.label}</div>
           </div>
@@ -278,7 +279,7 @@ export default function ClientDetail() {
         <div className="space-y-6">
           {/* Red Flags & Wins */}
           <div className="grid md:grid-cols-2 gap-4">
-            <div className="bg-brand-card border border-brand-slate rounded-lg p-5">
+            <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
               <h3 className="text-xs font-headline font-semibold uppercase tracking-wider text-red-400/80 mb-3 flex items-center gap-2">
                 <span>⚠</span> Red Flags
               </h3>
@@ -296,7 +297,7 @@ export default function ClientDetail() {
               )}
             </div>
 
-            <div className="bg-brand-card border border-brand-slate rounded-lg p-5">
+            <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
               <h3 className="text-xs font-headline font-semibold uppercase tracking-wider text-green-400/80 mb-3 flex items-center gap-2">
                 <span>✓</span> Wins to Acknowledge
               </h3>
@@ -316,7 +317,7 @@ export default function ClientDetail() {
           </div>
 
           {/* Mood & Energy Trend */}
-          <div className="bg-brand-card border border-brand-slate rounded-lg p-5">
+          <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
             <h3 className="text-xs font-headline font-semibold uppercase tracking-wider text-brand-cream/60 mb-4">7-Day Trend</h3>
             {client.moodTrend.length > 0 ? (
               <div className="overflow-x-auto">
@@ -331,7 +332,7 @@ export default function ClientDetail() {
                       <th className="text-center pb-2">Nutrition</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-brand-slate/30">
+                  <tbody className="divide-y divide-white/[0.04]">
                     {client.moodTrend.map((day, i) => (
                       <tr key={i}>
                         <td className="py-2 text-brand-cream/60">{new Date(day.date).toLocaleDateString('en', { weekday: 'short', day: 'numeric' })}</td>
@@ -363,7 +364,7 @@ export default function ClientDetail() {
           </div>
 
           {/* AI Pre-Call Analysis */}
-          <div className="bg-brand-card border border-brand-slate rounded-lg p-5">
+          <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xs font-headline font-semibold uppercase tracking-wider text-brand-cream/60">AI Pre-Call Briefing</h3>
               <button onClick={generateAnalysis} disabled={aiLoading} className="btn-primary !py-2 !px-4 !text-xs">
@@ -382,7 +383,7 @@ export default function ClientDetail() {
           </div>
 
           {/* Coach Notes */}
-          <div className="bg-brand-card border border-brand-slate rounded-lg p-5">
+          <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
             <h3 className="text-xs font-headline font-semibold uppercase tracking-wider text-brand-cream/60 mb-3">Private Coach Notes</h3>
             <textarea className="brand-input resize-none" rows={3} placeholder="Add private notes before the call..." />
           </div>
@@ -395,14 +396,14 @@ export default function ClientDetail() {
           {client.recentCheckIns.length > 0 ? (
             <div className="space-y-3">
               {client.recentCheckIns.map((ci: any) => (
-                <div key={ci.id} className="bg-brand-card border border-brand-slate rounded-lg p-5">
+                <div key={ci.id} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-sm font-headline font-semibold">
                       {new Date(ci.date).toLocaleDateString('en', { weekday: 'long', month: 'short', day: 'numeric' })}
                     </span>
                     <div className="flex gap-2">
-                      {ci.mood && <span className="text-xs bg-brand-surface px-2 py-0.5 rounded text-brand-cream/50">Mood: {ci.mood}/10</span>}
-                      {ci.energy && <span className="text-xs bg-brand-surface px-2 py-0.5 rounded text-brand-cream/50">Energy: {ci.energy}/10</span>}
+                      {ci.mood && <span className="text-xs bg-white/[0.03] px-2 py-0.5 rounded text-brand-cream/50">Mood: {ci.mood}/10</span>}
+                      {ci.energy && <span className="text-xs bg-white/[0.03] px-2 py-0.5 rounded text-brand-cream/50">Energy: {ci.energy}/10</span>}
                     </div>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs font-body">
@@ -416,7 +417,7 @@ export default function ClientDetail() {
               ))}
             </div>
           ) : (
-            <div className="bg-brand-card border border-brand-slate rounded-lg p-8 text-center">
+            <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-8 text-center">
               <p className="text-brand-cream/40 font-body text-sm">No check-ins recorded yet</p>
             </div>
           )}
@@ -425,7 +426,7 @@ export default function ClientDetail() {
 
       {/* ONBOARDING */}
       {tab === 'onboarding' && (
-        <div className="bg-brand-card border border-brand-slate rounded-lg p-6">
+        <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6">
           {client.onboarding ? (
             <div>
               <div className="flex items-center gap-3 mb-4">
@@ -459,7 +460,7 @@ export default function ClientDetail() {
                   <p className="text-green-400 font-headline font-semibold mb-2">Onboarding form sent!</p>
                   <p className="text-sm text-brand-cream/50 font-body mb-3">An email has been sent to {client.email}</p>
                   {onboardingUrl && (
-                    <div className="bg-brand-surface rounded-lg p-3 mt-3">
+                    <div className="bg-white/[0.03] rounded-lg p-3 mt-3">
                       <p className="text-xs text-brand-cream/40 font-body mb-1">Direct link (share manually if needed):</p>
                       <code className="text-xs text-brand-bronze break-all">{onboardingUrl}</code>
                     </div>
@@ -481,6 +482,6 @@ export default function ClientDetail() {
           )}
         </div>
       )}
-    </div>
+    </PageWrapper>
   )
 }

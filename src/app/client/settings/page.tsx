@@ -44,7 +44,7 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="max-w-lg space-y-6">
-        <div className="bg-brand-card border border-brand-slate rounded-lg p-6 animate-pulse h-48" />
+        <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6 animate-pulse h-48" />
       </div>
     )
   }
@@ -53,7 +53,7 @@ export default function SettingsPage() {
     <div className="max-w-lg">
       <h1 className="font-headline font-bold text-2xl mb-6">Settings</h1>
       <div className="space-y-6">
-        <div className="bg-brand-card border border-brand-slate rounded-lg p-6">
+        <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6">
           <h2 className="font-headline font-semibold text-sm uppercase tracking-wider text-brand-cream/60 mb-4">Profile</h2>
           <div className="space-y-3">
             <div>
@@ -71,7 +71,7 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <div className="bg-brand-card border border-brand-slate rounded-lg p-6">
+        <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6">
           <h2 className="font-headline font-semibold text-sm uppercase tracking-wider text-brand-cream/60 mb-4">Preferences</h2>
           <div className="space-y-3">
             <div>

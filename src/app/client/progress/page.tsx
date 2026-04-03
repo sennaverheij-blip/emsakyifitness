@@ -169,7 +169,7 @@ export default function ProgressPage() {
       {tab === 'photos' && (
         <div>
           {/* Upload */}
-          <div className="border-2 border-dashed border-brand-slate rounded-lg p-8 text-center mb-8 hover:border-brand-bronze/40 transition-colors cursor-pointer">
+          <div className="border-2 border-dashed border-white/[0.06] rounded-lg p-8 text-center mb-8 hover:border-brand-bronze/40 transition-colors cursor-pointer">
             <input type="file" accept="image/*" className="hidden" id="photoUpload" onChange={handlePhotoUpload} disabled={uploading} />
             <label htmlFor="photoUpload" className="cursor-pointer">
               <span className="text-3xl block mb-2">📷</span>
@@ -192,7 +192,7 @@ export default function ProgressPage() {
               <h3 className="text-xs text-brand-cream/40 font-headline uppercase tracking-wider mb-3">Your Photos</h3>
               <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
                 {photos.map((photo) => (
-                  <div key={photo.id} className="aspect-[3/4] bg-brand-card border border-brand-slate rounded-lg overflow-hidden relative">
+                  <div key={photo.id} className="aspect-[3/4] bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden relative">
                     <img src={photo.url} alt={photo.angle || 'Progress photo'} className="w-full h-full object-cover" />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 p-2">
                       <span className="text-[10px] text-brand-cream/70 font-body">
@@ -209,7 +209,7 @@ export default function ProgressPage() {
               <h3 className="text-xs text-brand-cream/40 font-headline uppercase tracking-wider mb-3">No photos yet</h3>
               <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
                 {['Front', 'Side', 'Back'].map((label) => (
-                  <div key={label} className="aspect-[3/4] bg-brand-card border border-brand-slate rounded-lg flex flex-col items-center justify-center">
+                  <div key={label} className="aspect-[3/4] bg-white/[0.02] border border-white/[0.06] rounded-2xl flex flex-col items-center justify-center">
                     <span className="text-2xl mb-2 opacity-20">◉</span>
                     <span className="text-[10px] text-brand-cream/30 font-body">{label}</span>
                   </div>
@@ -225,7 +225,7 @@ export default function ProgressPage() {
           <p className="text-sm text-brand-cream/50 font-body mb-6">Log your measurements to track visual changes over time.</p>
 
           {measurements.length > 0 && (
-            <div className="mb-6 p-4 bg-brand-card border border-brand-slate rounded-lg">
+            <div className="mb-6 p-4 bg-white/[0.02] border border-white/[0.06] rounded-2xl">
               <p className="text-xs text-brand-cream/40 font-body mb-2">
                 Last logged: {new Date(measurements[0].date).toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' })}
               </p>
@@ -267,7 +267,7 @@ export default function ProgressPage() {
           <p className="text-sm text-brand-cream/50 font-body mb-6">Track your key lifts and performance benchmarks.</p>
           <div className="space-y-4">
             {PERFORMANCE_LIFTS.map((lift) => (
-              <div key={lift.label} className="bg-brand-card border border-brand-slate rounded-lg p-4 flex items-center justify-between">
+              <div key={lift.label} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-4 flex items-center justify-between">
                 <div>
                   <p className="font-body text-sm text-brand-cream">{lift.label}</p>
                   <p className="text-xs text-brand-cream/40 font-body">Last: {getLatestForLift(lift.label)}</p>

@@ -34,7 +34,7 @@ export default function WorkoutPlan() {
 
   if (!plan) {
     return (
-      <div className="bg-brand-card border border-brand-slate rounded-lg p-12 text-center">
+      <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-12 text-center">
         <h2 className="font-headline font-bold text-xl mb-2">Your workout plan is being built</h2>
         <p className="text-sm text-brand-cream/50 font-body">Your coach is preparing your personalised training protocol. Check back soon.</p>
       </div>
@@ -65,7 +65,7 @@ export default function WorkoutPlan() {
           const isRest = day.session_type?.toLowerCase().includes('rest') || day.session_type?.toLowerCase().includes('recovery')
 
           return (
-            <div key={i} className="bg-brand-card border border-brand-slate rounded-lg overflow-hidden">
+            <div key={i} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden">
               <button type="button"
                 onClick={() => hasExercises && setExpanded(expanded === i ? null : i)}
                 className="w-full flex items-center justify-between p-5 text-left">
@@ -86,7 +86,7 @@ export default function WorkoutPlan() {
               </button>
 
               {expanded === i && hasExercises && (
-                <div className="border-t border-brand-slate p-5">
+                <div className="border-t border-white/[0.06] p-5">
                   {/* Warmup */}
                   {day.warmup && day.warmup.length > 0 && (
                     <div className="mb-4">
