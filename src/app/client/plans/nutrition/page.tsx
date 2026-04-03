@@ -34,7 +34,7 @@ export default function NutritionPlan() {
 
   if (!plan) {
     return (
-      <div className="bg-brand-card border border-brand-slate rounded-lg p-12 text-center">
+      <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-12 text-center">
         <h2 className="font-headline font-bold text-xl mb-2">Your nutrition plan is being built</h2>
         <p className="text-sm text-brand-cream/50 font-body">Your coach is preparing your personalised meal plan. Check back soon.</p>
       </div>
@@ -61,7 +61,7 @@ export default function NutritionPlan() {
             { label: 'Carbs', val: targets.carbs_g, unit: 'g' },
             { label: 'Fats', val: targets.fats_g, unit: 'g' },
           ].map((m) => (
-            <div key={m.label} className="bg-brand-card border border-brand-slate rounded-lg p-4 text-center">
+            <div key={m.label} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-4 text-center">
               <div className="font-headline font-bold text-xl text-brand-bronze">{m.val}{m.unit}</div>
               <div className="text-xs text-brand-cream/40 font-body mt-1">{m.label} target</div>
             </div>
@@ -76,7 +76,7 @@ export default function NutritionPlan() {
             className={`px-4 py-2 text-xs font-headline font-semibold uppercase tracking-wider rounded-lg whitespace-nowrap transition-all ${
               selectedDay === day
                 ? 'bg-brand-bronze/10 text-brand-bronze border border-brand-bronze'
-                : 'bg-brand-surface text-brand-cream/40 border border-brand-slate hover:text-brand-cream/60'
+                : 'bg-white/[0.04] text-brand-cream/40 border border-white/[0.06] hover:text-brand-cream/60'
             }`}>
             {day.slice(0, 3)}
           </button>
@@ -98,7 +98,7 @@ export default function NutritionPlan() {
       {tab === 'meals' ? (
         <div className="space-y-3">
           {meals.length > 0 ? meals.map((meal: any, i: number) => (
-            <div key={i} className="bg-brand-card border border-brand-slate rounded-lg overflow-hidden">
+            <div key={i} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden">
               <button type="button" onClick={() => setExpanded(expanded === i ? null : i)}
                 className="w-full flex items-center justify-between p-5 text-left">
                 <div>
@@ -114,7 +114,7 @@ export default function NutritionPlan() {
               </button>
 
               {expanded === i && (
-                <div className="border-t border-brand-slate p-5 space-y-4">
+                <div className="border-t border-white/[0.06] p-5 space-y-4">
                   {meal.ingredients && (
                     <div>
                       <h4 className="text-xs text-brand-cream/50 font-body uppercase tracking-wider mb-2">Ingredients</h4>
@@ -144,7 +144,7 @@ export default function NutritionPlan() {
               )}
             </div>
           )) : (
-            <div className="bg-brand-card border border-brand-slate rounded-lg p-8 text-center">
+            <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-8 text-center">
               <p className="text-brand-cream/40 font-body text-sm">No meals planned for {selectedDay}</p>
             </div>
           )}
@@ -156,7 +156,7 @@ export default function NutritionPlan() {
               <h3 className="text-xs text-brand-bronze font-headline font-semibold uppercase tracking-wider mb-3">{category}</h3>
               <div className="space-y-2">
                 {(Array.isArray(items) ? items : []).map((item: any, i: number) => (
-                  <label key={i} className="flex items-center gap-3 p-3 bg-brand-card border border-brand-slate rounded cursor-pointer hover:border-brand-bronze/30 transition-colors">
+                  <label key={i} className="flex items-center gap-3 p-3 bg-brand-card border border-white/[0.06] rounded cursor-pointer hover:border-brand-bronze/30 transition-colors">
                     <input type="checkbox" className="w-4 h-4 accent-[#C9A961] rounded" />
                     <span className="text-sm font-body text-brand-cream/70">{typeof item === 'string' ? item : item.item}</span>
                   </label>
