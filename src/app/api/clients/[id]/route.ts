@@ -54,6 +54,12 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
       trained: ci.trained,
       nutrition: ci.nutritionCompliance,
       sleep: ci.sleepHours,
+      sleepQuality: ci.sleepQuality,
+      weightKg: ci.weightKg,
+      steps: ci.steps,
+      stressLevel: ci.stressLevel,
+      workoutName: ci.workoutName,
+      workoutPerformance: ci.workoutPerformance,
     })).reverse()
 
     // Red flags

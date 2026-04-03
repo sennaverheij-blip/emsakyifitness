@@ -51,3 +51,28 @@ export async function GET() {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
+
+export async function PATCH(req: Request) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+    }
+
+    const body = await req.json()
+    const { name, country } = body
+
+    const updated = await prisma.user.update({
+      where: { email: session.user.email },
+      data: {
+        ...(name !== undefined && { name }),
+        ...(country !== undefined && { country }),
+      },
+      select: { id: true, name: true, email: true, country: true },
+    })
+
+    return NextResponse.json({ success: true, user: updated })
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+}
