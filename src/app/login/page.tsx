@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CanvasRevealEffect } from '@/components/ui/canvas-reveal-effect'
+import { AuroraBackground } from '@/components/ui/aurora-background'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -14,8 +14,6 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const [initialCanvasVisible, setInitialCanvasVisible] = useState(true)
-  const [reverseCanvasVisible, setReverseCanvasVisible] = useState(false)
   const passwordRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -26,10 +24,7 @@ export default function LoginPage() {
 
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (email) {
-      setError('')
-      setStep('password')
-    }
+    if (email) { setError(''); setStep('password') }
   }
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -37,11 +32,7 @@ export default function LoginPage() {
     setLoading(true)
     setError('')
 
-    const res = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    })
+    const res = await signIn('credentials', { email, password, redirect: false })
 
     if (res?.error) {
       setError(res.error === 'CredentialsSignin' ? 'Invalid email or password' : res.error)
@@ -49,12 +40,7 @@ export default function LoginPage() {
       return
     }
 
-    // Trigger success animation
-    setReverseCanvasVisible(true)
-    setTimeout(() => setInitialCanvasVisible(false), 50)
-    setTimeout(() => setStep('success'), 1500)
-
-    // Redirect after animation
+    setStep('success')
     const session = await fetch('/api/auth/session').then(r => r.json())
     const role = session?.user?.role
 
@@ -62,98 +48,54 @@ export default function LoginPage() {
       if (role === 'main-coach') router.push('/admin/dashboard')
       else if (role === 'coach') router.push('/coach/dashboard')
       else router.push('/client/dashboard')
-    }, 2500)
+    }, 1500)
   }
 
   return (
-    <div className="flex w-full flex-col min-h-screen bg-brand-black relative">
-      {/* Animated background */}
-      <div className="absolute inset-0 z-0">
-        {initialCanvasVisible && (
-          <div className="absolute inset-0">
-            <CanvasRevealEffect
-              animationSpeed={3}
-              containerClassName="bg-brand-black"
-              colors={[[201, 169, 97], [212, 175, 55]]}
-              dotSize={5}
-              reverse={false}
-            />
-          </div>
-        )}
-        {reverseCanvasVisible && (
-          <div className="absolute inset-0">
-            <CanvasRevealEffect
-              animationSpeed={4}
-              containerClassName="bg-brand-black"
-              colors={[[201, 169, 97], [212, 175, 55]]}
-              dotSize={5}
-              reverse={true}
-            />
-          </div>
-        )}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(10,10,10,1)_0%,_transparent_100%)]" />
-        <div className="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-brand-black to-transparent" />
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10 flex flex-col flex-1">
-        {/* Logo bar */}
-        <div className="flex items-center justify-center pt-10 pb-4">
-          <div className="font-headline font-bold text-lg tracking-[0.25em] uppercase">
-            <span className="text-brand-bronze">EMSAKYI</span>
-            <span className="text-brand-cream/70">FITNESS</span>
+    <AuroraBackground className="min-h-screen w-full" showRadialGradient={true}>
+      <div className="relative z-10 flex flex-col min-h-screen w-full">
+        {/* Logo */}
+        <div className="flex items-center justify-center pt-12 pb-4">
+          <div className="font-headline font-bold text-sm tracking-[0.3em] uppercase">
+            <span className="text-gradient-bronze">EMSAKYI</span>
+            <span className="text-brand-cream/50">FITNESS</span>
           </div>
         </div>
 
-        {/* Form container */}
+        {/* Form */}
         <div className="flex-1 flex flex-col justify-center items-center px-6">
           <div className="w-full max-w-sm">
             <AnimatePresence mode="wait">
               {step === 'email' && (
                 <motion.div
-                  key="email-step"
-                  initial={{ opacity: 0, x: -80 }}
+                  key="email"
+                  initial={{ opacity: 0, x: -60 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -80 }}
-                  transition={{ duration: 0.4, ease: 'easeOut' }}
-                  className="space-y-8 text-center"
+                  exit={{ opacity: 0, x: -60 }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  className="space-y-10 text-center"
                 >
-                  <div className="space-y-2">
-                    <h1 className="text-[2.2rem] font-headline font-bold leading-[1.1] tracking-tight text-brand-cream">
-                      Enter The Protocol
-                    </h1>
-                    <p className="text-lg text-brand-cream/40 font-accent italic">
-                      Your transformation starts here
-                    </p>
+                  <div className="space-y-3">
+                    <h1 className="heading-xl text-brand-cream">Enter The Protocol</h1>
+                    <p className="text-lg text-brand-cream/35 font-light">Your transformation starts here</p>
                   </div>
 
-                  <form onSubmit={handleEmailSubmit} className="space-y-4">
+                  <form onSubmit={handleEmailSubmit}>
                     <div className="relative">
                       <input
-                        type="email"
-                        placeholder="your@email.com"
-                        value={email}
+                        type="email" placeholder="your@email.com" value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full backdrop-blur-sm bg-brand-cream/[0.03] text-brand-cream border border-brand-cream/10 rounded-full py-3.5 pl-5 pr-14 focus:outline-none focus:border-brand-bronze/40 text-center font-body transition-colors"
+                        className="w-full bg-white/[0.04] text-brand-cream border border-white/[0.08] rounded-full py-3.5 pl-5 pr-14 focus:outline-none focus:border-brand-bronze/40 text-center text-sm transition-all duration-200"
                         required
                       />
-                      <button
-                        type="submit"
-                        className="absolute right-1.5 top-1/2 -translate-y-1/2 text-brand-cream w-10 h-10 flex items-center justify-center rounded-full bg-brand-cream/10 hover:bg-brand-bronze/20 transition-colors group overflow-hidden"
-                      >
-                        <span className="relative w-full h-full block overflow-hidden">
-                          <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-full text-brand-bronze">
-                            &rarr;
-                          </span>
-                          <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 -translate-x-full group-hover:translate-x-0 text-brand-bronze">
-                            &rarr;
-                          </span>
-                        </span>
+                      <button type="submit"
+                        className="absolute right-1.5 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-white/[0.06] hover:bg-brand-bronze/20 transition-all duration-200 text-brand-bronze">
+                        →
                       </button>
                     </div>
                   </form>
 
-                  <p className="text-xs text-brand-cream/20 pt-8 font-body">
+                  <p className="text-xs text-brand-cream/15">
                     First time? Your coach will send you an invite with your credentials.
                   </p>
                 </motion.div>
@@ -161,20 +103,16 @@ export default function LoginPage() {
 
               {step === 'password' && (
                 <motion.div
-                  key="password-step"
-                  initial={{ opacity: 0, x: 80 }}
+                  key="password"
+                  initial={{ opacity: 0, x: 60 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 80 }}
-                  transition={{ duration: 0.4, ease: 'easeOut' }}
-                  className="space-y-8 text-center"
+                  exit={{ opacity: 0, x: 60 }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  className="space-y-10 text-center"
                 >
-                  <div className="space-y-2">
-                    <h1 className="text-[2.2rem] font-headline font-bold leading-[1.1] tracking-tight text-brand-cream">
-                      Welcome back
-                    </h1>
-                    <p className="text-base text-brand-cream/40 font-body">
-                      {email}
-                    </p>
+                  <div className="space-y-3">
+                    <h1 className="heading-xl text-brand-cream">Welcome back</h1>
+                    <p className="text-sm text-brand-cream/35">{email}</p>
                   </div>
 
                   <form onSubmit={handleLogin} className="space-y-4">
@@ -182,91 +120,60 @@ export default function LoginPage() {
                       <input
                         ref={passwordRef}
                         type={showPassword ? 'text' : 'password'}
-                        placeholder="Password"
-                        value={password}
+                        placeholder="Password" value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full backdrop-blur-sm bg-brand-cream/[0.03] text-brand-cream border border-brand-cream/10 rounded-full py-3.5 pl-5 pr-14 focus:outline-none focus:border-brand-bronze/40 text-center font-body transition-colors"
+                        className="w-full bg-white/[0.04] text-brand-cream border border-white/[0.08] rounded-full py-3.5 pl-5 pr-14 focus:outline-none focus:border-brand-bronze/40 text-center text-sm transition-all duration-200"
                         required
                       />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-1.5 top-1/2 -translate-y-1/2 text-brand-cream/40 w-10 h-10 flex items-center justify-center rounded-full hover:text-brand-cream/60 transition-colors"
-                      >
+                      <button type="button" onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-1.5 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full text-brand-cream/30 hover:text-brand-cream/50 transition-colors">
                         {showPassword ? (
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                            <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" />
-                            <line x1="1" y1="1" x2="23" y2="23" />
-                          </svg>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" /><line x1="1" y1="1" x2="23" y2="23" /></svg>
                         ) : (
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                            <circle cx="12" cy="12" r="3" />
-                          </svg>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
                         )}
                       </button>
                     </div>
 
                     {error && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-sm text-red-400/80 font-body"
-                      >
-                        {error}
-                      </motion.p>
+                      <motion.p initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }}
+                        className="text-sm text-red-400/80">{error}</motion.p>
                     )}
 
                     <div className="flex w-full gap-3 pt-2">
-                      <motion.button
-                        type="button"
+                      <button type="button"
                         onClick={() => { setStep('email'); setPassword(''); setError('') }}
-                        className="rounded-full bg-brand-cream/10 text-brand-cream font-headline font-semibold text-sm px-6 py-3.5 hover:bg-brand-cream/15 transition-colors uppercase tracking-wider"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
+                        className="btn-secondary !px-6">
                         Back
-                      </motion.button>
-                      <motion.button
-                        type="submit"
-                        disabled={loading}
-                        className="flex-1 rounded-full font-headline font-semibold text-sm py-3.5 uppercase tracking-wider transition-all duration-300 bg-gradient-to-r from-brand-bronze to-brand-gold text-brand-black hover:shadow-[0_0_24px_rgba(201,169,97,0.3)] disabled:opacity-60"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
+                      </button>
+                      <button type="submit" disabled={loading} className="btn-primary flex-1">
                         {loading ? 'Authenticating...' : 'Enter'}
-                      </motion.button>
+                      </button>
                     </div>
                   </form>
 
-                  <p className="text-xs text-brand-cream/20 pt-4 font-body">
-                    Forgot your password? Contact your coach.
-                  </p>
+                  <p className="text-xs text-brand-cream/15">Forgot your password? Contact your coach.</p>
                 </motion.div>
               )}
 
               {step === 'success' && (
                 <motion.div
-                  key="success-step"
-                  initial={{ opacity: 0, y: 40 }}
+                  key="success"
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
-                  className="space-y-6 text-center"
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                  className="space-y-8 text-center"
                 >
-                  <div className="space-y-2">
-                    <h1 className="text-[2.2rem] font-headline font-bold leading-[1.1] tracking-tight text-brand-cream">
-                      You&apos;re in.
-                    </h1>
-                    <p className="text-base text-brand-cream/40 font-accent italic">
-                      The protocol is active
-                    </p>
+                  <div className="space-y-3">
+                    <h1 className="heading-xl text-brand-cream">You&apos;re in.</h1>
+                    <p className="text-brand-cream/35 font-light font-accent italic text-lg">The protocol is active</p>
                   </div>
 
                   <motion.div
-                    initial={{ scale: 0.6, opacity: 0 }}
+                    initial={{ scale: 0.5, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
-                    className="py-8"
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                    className="py-6"
                   >
                     <div className="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-brand-bronze to-brand-gold flex items-center justify-center">
                       <svg className="h-8 w-8 text-brand-black" viewBox="0 0 20 20" fill="currentColor">
@@ -275,14 +182,7 @@ export default function LoginPage() {
                     </div>
                   </motion.div>
 
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                    className="text-sm text-brand-cream/30 font-body"
-                  >
-                    Redirecting to your portal...
-                  </motion.p>
+                  <p className="text-sm text-brand-cream/25">Redirecting to your portal...</p>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -291,11 +191,11 @@ export default function LoginPage() {
 
         {/* Footer */}
         <div className="text-center pb-8">
-          <p className="text-[11px] text-brand-cream/15 font-body tracking-wider">
-            &copy; {new Date().getFullYear()} EMSAKYI FITNESS &middot; The Presence Protocol
+          <p className="text-[11px] text-brand-cream/10 tracking-wider">
+            &copy; {new Date().getFullYear()} EMSAKYI FITNESS
           </p>
         </div>
       </div>
-    </div>
+    </AuroraBackground>
   )
 }

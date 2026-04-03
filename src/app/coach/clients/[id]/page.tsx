@@ -131,8 +131,8 @@ export default function ClientDetail() {
   if (loading) {
     return (
       <div className="space-y-4">
-        <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-8 animate-pulse h-24" />
-        <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-8 animate-pulse h-48" />
+        <div className="apple-card-static animate-pulse h-24" />
+        <div className="apple-card-static animate-pulse h-48" />
       </div>
     )
   }
@@ -151,34 +151,31 @@ export default function ClientDetail() {
   return (
     <PageWrapper>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-16">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-full bg-gradient-to-br from-brand-bronze/20 to-brand-card border border-brand-bronze/30 flex items-center justify-center text-xl font-headline font-bold text-brand-bronze">
             {(client.name || '?')[0]}
           </div>
           <div>
-            <h1 className="font-headline font-bold text-2xl">{client.name}</h1>
+            <h1 className="heading-lg">{client.name}</h1>
             <div className="flex items-center gap-2 mt-1 flex-wrap">
-              <span className="text-xs text-brand-cream/40 font-body">{client.email}</span>
-              {client.country && <span className="text-xs text-brand-cream/30">· {client.country}</span>}
-              <span className={`text-[10px] font-headline font-semibold uppercase tracking-wider px-2 py-0.5 rounded ${
-                client.tier === 'elite' ? 'bg-brand-bronze/10 text-brand-bronze border border-brand-bronze/30' : 'bg-white/[0.03] text-brand-cream/50 border border-white/[0.06]'
-              }`}>{client.tier}</span>
+              <span className="label-sm font-body">{client.email}</span>
+              {client.country && <span className="label-sm">· {client.country}</span>}
+              <span className={client.tier === 'elite' ? 'badge badge-bronze' : 'badge badge-neutral'}>{client.tier}</span>
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-3">
           <button type="button" onClick={sendOnboarding} disabled={onboardingSending}
-            style={{ position: 'relative', zIndex: 10 }}
-            className="inline-flex items-center justify-center gap-2 bg-transparent text-brand-bronze font-headline font-semibold text-xs px-4 py-2.5 border-2 border-brand-bronze rounded-lg uppercase tracking-wide cursor-pointer transition-all duration-200 hover:bg-brand-bronze hover:text-brand-black">
+            className="btn-secondary">
             {onboardingSending ? 'Sending...' : onboardingSent ? 'Sent ✓' : 'Send Onboarding Form'}
           </button>
           <button type="button" onClick={() => setShowPlanForm(!showPlanForm)}
-            style={{ position: 'relative', zIndex: 10, background: 'linear-gradient(135deg, #C85A17, #D4AF37)', color: '#0A0A0A', border: 'none', padding: '10px 16px', borderRadius: '8px', fontWeight: 600, fontSize: '12px', cursor: 'pointer', letterSpacing: '0.5px', textTransform: 'uppercase' as const }}>
+            className="btn-primary">
             {plansGenerated ? 'Plans Generated ✓' : 'Generate AI Plans'}
           </button>
           <button type="button" onClick={() => { setTab('precall'); generateAnalysis() }}
-            style={{ position: 'relative', zIndex: 10, background: 'linear-gradient(135deg, #C9A961, #D4AF37)', color: '#0A0A0A', border: 'none', padding: '10px 16px', borderRadius: '8px', fontWeight: 600, fontSize: '12px', cursor: 'pointer', letterSpacing: '0.5px', textTransform: 'uppercase' as const }}>
+            className="btn-primary">
             Pre-Call Briefing
           </button>
         </div>

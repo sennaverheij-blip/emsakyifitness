@@ -38,8 +38,13 @@ const config: Config = {
         'slide-in-right': 'slideInRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
         'fade-in': 'fadeIn 0.6s ease forwards',
         'glow': 'glow 3s ease-in-out infinite',
+        'aurora': 'aurora 60s linear infinite',
       },
       keyframes: {
+        aurora: {
+          'from': { backgroundPosition: '50% 50%, 50% 50%' },
+          'to': { backgroundPosition: '350% 50%, 350% 50%' },
+        },
         shimmer: {
           '0%, 100%': { opacity: '0.5' },
           '50%': { opacity: '1' },

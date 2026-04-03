@@ -12,60 +12,62 @@ export default function Sidebar({ items, role }: { items: NavItem[]; role: strin
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex lg:flex-col lg:w-64 bg-brand-black/80 backdrop-blur-xl border-r border-white/[0.06] min-h-screen fixed left-0 top-0 z-40">
-        <div className="p-6 border-b border-white/[0.06]">
-          <div className="font-headline font-bold text-sm tracking-[0.2em] uppercase">
+      <aside className="hidden lg:flex lg:flex-col lg:w-[260px] bg-brand-black/90 backdrop-blur-2xl border-r border-white/[0.04] min-h-screen fixed left-0 top-0 z-40">
+        {/* Logo */}
+        <div className="px-7 pt-8 pb-6">
+          <div className="font-headline font-bold text-sm tracking-[0.25em] uppercase">
             <span className="text-gradient-bronze">EMSAKYI</span>
-            <span className="text-brand-cream/60">FITNESS</span>
+            <span className="text-brand-cream/50">FITNESS</span>
           </div>
-          <p className="text-[10px] text-brand-cream/25 font-body mt-1.5 uppercase tracking-[0.15em]">{role}</p>
+          <p className="label-sm mt-2">{role}</p>
         </div>
 
-        <nav className="flex-1 p-3 space-y-0.5 mt-2">
+        {/* Nav */}
+        <nav className="flex-1 px-4 space-y-1">
           {items.map((item) => {
             const active = pathname === item.href || pathname.startsWith(item.href + '/')
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-body transition-all duration-200 ${
+                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all duration-200 ${
                   active
-                    ? 'bg-brand-bronze/[0.08] text-brand-bronze shadow-[inset_0_0_0_1px_rgba(201,169,97,0.15)]'
-                    : 'text-brand-cream/50 hover:text-brand-cream/80 hover:bg-white/[0.03]'
+                    ? 'bg-white/[0.06] text-brand-bronze font-medium'
+                    : 'text-brand-cream/45 hover:text-brand-cream/70 hover:bg-white/[0.03] font-normal'
                 }`}
               >
-                <span className={`text-base transition-transform duration-200 ${active ? 'scale-110' : ''}`}>{item.icon}</span>
-                <span className="font-medium">{item.label}</span>
-                {active && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-brand-bronze" />}
+                <span className="text-base w-5 text-center">{item.icon}</span>
+                <span>{item.label}</span>
               </Link>
             )
           })}
         </nav>
 
-        <div className="p-3 border-t border-white/[0.06]">
+        {/* Sign out */}
+        <div className="px-4 py-6">
           <button
             onClick={() => signOut({ callbackUrl: '/login' })}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-body text-brand-cream/30 hover:text-red-400/80 hover:bg-red-400/[0.04] transition-all duration-200"
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-brand-cream/25 hover:text-red-400/70 hover:bg-red-400/[0.04] transition-all duration-200"
           >
-            <span className="text-base">↗</span>
-            <span className="font-medium">Sign Out</span>
+            <span className="text-base w-5 text-center">↗</span>
+            <span>Sign Out</span>
           </button>
         </div>
       </aside>
 
-      {/* Mobile bottom tab bar */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-brand-black/90 backdrop-blur-xl border-t border-white/[0.06] flex justify-around py-1.5 px-2">
+      {/* Mobile bottom nav */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-brand-black/95 backdrop-blur-2xl border-t border-white/[0.04] flex justify-around py-2 px-1 safe-area-pb">
         {items.slice(0, 5).map((item) => {
           const active = pathname === item.href || pathname.startsWith(item.href + '/')
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center gap-0.5 py-1.5 px-2 rounded-lg text-[10px] font-body transition-all ${
-                active ? 'text-brand-bronze' : 'text-brand-cream/35'
+              className={`flex flex-col items-center gap-0.5 py-1 px-3 rounded-lg text-[10px] transition-all duration-150 ${
+                active ? 'text-brand-bronze' : 'text-brand-cream/30'
               }`}
             >
-              <span className={`text-lg transition-transform duration-200 ${active ? 'scale-110' : ''}`}>{item.icon}</span>
+              <span className="text-lg">{item.icon}</span>
               <span className="font-medium">{item.label}</span>
             </Link>
           )
