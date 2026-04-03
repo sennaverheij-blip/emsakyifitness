@@ -15,21 +15,13 @@ export default function PasswordChange() {
     setIsError(false)
 
     if (!currentPassword || !newPassword) {
-      setMsg('Please fill in all fields')
-      setIsError(true)
-      return
+      setMsg('Please fill in all fields'); setIsError(true); return
     }
-
     if (newPassword.length < 8) {
-      setMsg('New password must be at least 8 characters')
-      setIsError(true)
-      return
+      setMsg('New password must be at least 8 characters'); setIsError(true); return
     }
-
     if (newPassword !== confirmPassword) {
-      setMsg('New passwords do not match')
-      setIsError(true)
-      return
+      setMsg('New passwords do not match'); setIsError(true); return
     }
 
     setSaving(true)
@@ -43,63 +35,37 @@ export default function PasswordChange() {
       if (data.success) {
         setMsg('Password updated successfully')
         setIsError(false)
-        setCurrentPassword('')
-        setNewPassword('')
-        setConfirmPassword('')
+        setCurrentPassword(''); setNewPassword(''); setConfirmPassword('')
       } else {
-        setMsg(data.error || 'Failed to update password')
-        setIsError(true)
+        setMsg(data.error || 'Failed to update password'); setIsError(true)
       }
     } catch {
-      setMsg('Network error. Please try again.')
-      setIsError(true)
+      setMsg('Network error. Please try again.'); setIsError(true)
     }
     setSaving(false)
   }
 
   return (
-    <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6">
-      <h2 className="font-headline font-semibold text-sm uppercase tracking-wider text-brand-cream/60 mb-4">Change Password</h2>
-      <div className="space-y-3">
+    <div className="apple-card-static p-8">
+      <h2 className="label-sm mb-6">Change Password</h2>
+      <div className="space-y-4">
         <div>
-          <label className="block text-xs text-brand-cream/50 font-body mb-1">Current password</label>
-          <input
-            type="password"
-            className="brand-input"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            placeholder="Enter current password"
-          />
+          <label className="block text-sm font-medium text-brand-cream/50 mb-1.5">Current password</label>
+          <input type="password" className="brand-input" value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)} placeholder="Enter current password" />
         </div>
         <div>
-          <label className="block text-xs text-brand-cream/50 font-body mb-1">New password</label>
-          <input
-            type="password"
-            className="brand-input"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="Min. 8 characters"
-          />
+          <label className="block text-sm font-medium text-brand-cream/50 mb-1.5">New password</label>
+          <input type="password" className="brand-input" value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)} placeholder="Min. 8 characters" />
         </div>
         <div>
-          <label className="block text-xs text-brand-cream/50 font-body mb-1">Confirm new password</label>
-          <input
-            type="password"
-            className="brand-input"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Repeat new password"
-          />
+          <label className="block text-sm font-medium text-brand-cream/50 mb-1.5">Confirm new password</label>
+          <input type="password" className="brand-input" value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Repeat new password" />
         </div>
-        {msg && (
-          <p className={`text-sm font-body ${isError ? 'text-red-400' : 'text-green-400'}`}>{msg}</p>
-        )}
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={saving}
-          className="btn-secondary !py-2.5 !px-5 !text-sm"
-        >
+        {msg && <p className={`text-sm ${isError ? 'text-red-400' : 'text-green-400'}`}>{msg}</p>}
+        <button type="button" onClick={handleSubmit} disabled={saving} className="btn-secondary !text-sm">
           {saving ? 'Updating...' : 'Update Password'}
         </button>
       </div>

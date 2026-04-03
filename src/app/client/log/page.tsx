@@ -138,10 +138,10 @@ export default function DailyLog() {
   }
 
   return (
-    <div className="max-w-2xl">
+    <div className="max-w-2xl py-16">
       {/* Tabs */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="font-headline font-bold text-2xl">Daily Tracker</h1>
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="heading-lg">Daily Tracker</h1>
         <div className="flex bg-white/[0.04] rounded-lg p-0.5">
           {(['log', 'history'] as const).map((t) => (
             <button key={t} onClick={() => setTab(t)}
@@ -165,18 +165,18 @@ export default function DailyLog() {
           <form onSubmit={handleSubmit} className="space-y-8">
 
             {/* ── Date & Weight ── */}
-            <section className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
-              <h2 className="font-headline font-semibold text-xs uppercase tracking-wider text-brand-bronze mb-4">Date & Body Weight</h2>
+            <section className="apple-card-static p-8">
+              <h2 className="label-sm mb-5 text-brand-bronze">Date & Body Weight</h2>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs text-brand-cream/50 font-body mb-1.5">Date</label>
+                  <label className="label-sm mb-1.5">Date</label>
                   <input
                     type="date" value={date} onChange={(e) => setDate(e.target.value)}
                     className="brand-input !py-2.5"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-brand-cream/50 font-body mb-1.5">Body Weight (kg)</label>
+                  <label className="label-sm mb-1.5">Body Weight (kg)</label>
                   <input
                     type="number" step="0.1" value={weightKg}
                     onChange={(e) => setWeightKg(e.target.value)}
@@ -187,11 +187,11 @@ export default function DailyLog() {
             </section>
 
             {/* ── Activity ── */}
-            <section className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
-              <h2 className="font-headline font-semibold text-xs uppercase tracking-wider text-brand-bronze mb-4">Activity</h2>
+            <section className="apple-card-static p-8">
+              <h2 className="label-sm mb-5 text-brand-bronze">Activity</h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs text-brand-cream/50 font-body mb-1.5">Steps</label>
+                  <label className="label-sm mb-1.5">Steps</label>
                   <input
                     type="number" value={steps} onChange={(e) => setSteps(e.target.value)}
                     className="brand-input !py-2.5" placeholder="e.g. 10000"
@@ -206,11 +206,11 @@ export default function DailyLog() {
             </section>
 
             {/* ── Sleep ── */}
-            <section className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
-              <h2 className="font-headline font-semibold text-xs uppercase tracking-wider text-brand-bronze mb-4">Sleep</h2>
+            <section className="apple-card-static p-8">
+              <h2 className="label-sm mb-5 text-brand-bronze">Sleep</h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs text-brand-cream/50 font-body mb-1.5">Duration (hours)</label>
+                  <label className="label-sm mb-1.5">Duration (hours)</label>
                   <input
                     type="number" step="0.25" min="0" max="14" value={sleepHours}
                     onChange={(e) => setSleepHours(e.target.value)}
@@ -223,11 +223,11 @@ export default function DailyLog() {
             </section>
 
             {/* ── Nutrition ── */}
-            <section className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
-              <h2 className="font-headline font-semibold text-xs uppercase tracking-wider text-brand-bronze mb-4">Nutrition</h2>
+            <section className="apple-card-static p-8">
+              <h2 className="label-sm mb-5 text-brand-bronze">Nutrition</h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs text-brand-cream/50 font-body mb-2">Did you follow your meal plan?</label>
+                  <label className="label-sm mb-2">Did you follow your meal plan?</label>
                   <div className="flex gap-2 flex-wrap">
                     {(['full', 'mostly', 'partial', 'off-plan'] as const).map((val) => (
                       <button key={val} type="button" onClick={() => setNutritionCompliance(val)}
@@ -244,7 +244,7 @@ export default function DailyLog() {
 
                 {nutritionCompliance !== 'full' && (
                   <div>
-                    <label className="block text-xs text-brand-cream/50 font-body mb-1.5">Off-plan meals / deviations</label>
+                    <label className="label-sm mb-1.5">Off-plan meals / deviations</label>
                     <textarea
                       value={offPlanMeals} onChange={(e) => setOffPlanMeals(e.target.value)}
                       rows={2} className="brand-input resize-none"
@@ -256,11 +256,11 @@ export default function DailyLog() {
             </section>
 
             {/* ── Workout ── */}
-            <section className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
-              <h2 className="font-headline font-semibold text-xs uppercase tracking-wider text-brand-bronze mb-4">Workout</h2>
+            <section className="apple-card-static p-8">
+              <h2 className="label-sm mb-5 text-brand-bronze">Workout</h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs text-brand-cream/50 font-body mb-2">Did you train today?</label>
+                  <label className="label-sm mb-2">Did you train today?</label>
                   <div className="flex gap-3">
                     {[true, false].map((val) => (
                       <button key={String(val)} type="button" onClick={() => setTrained(val)}
@@ -278,7 +278,7 @@ export default function DailyLog() {
                 {trained && (
                   <>
                     <div>
-                      <label className="block text-xs text-brand-cream/50 font-body mb-1.5">Workout of the day</label>
+                      <label className="label-sm mb-1.5">Workout of the day</label>
                       <input
                         type="text" value={workoutName}
                         onChange={(e) => setWorkoutName(e.target.value)}
@@ -294,8 +294,8 @@ export default function DailyLog() {
             </section>
 
             {/* ── Energy & Mood ── */}
-            <section className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
-              <h2 className="font-headline font-semibold text-xs uppercase tracking-wider text-brand-bronze mb-4">Energy & Mood</h2>
+            <section className="apple-card-static p-8">
+              <h2 className="label-sm mb-5 text-brand-bronze">Energy & Mood</h2>
               <div className="space-y-5">
                 <SliderField label="Energy Level" value={energy} onChange={setEnergy}
                   lowLabel="Drained" highLabel="Fired up" />
@@ -307,8 +307,8 @@ export default function DailyLog() {
             </section>
 
             {/* ── Daily Comments ── */}
-            <section className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
-              <h2 className="font-headline font-semibold text-xs uppercase tracking-wider text-brand-bronze mb-4">Daily Comments</h2>
+            <section className="apple-card-static p-8">
+              <h2 className="label-sm mb-5 text-brand-bronze">Daily Comments</h2>
               <textarea
                 value={notes} onChange={(e) => setNotes(e.target.value)}
                 rows={3} className="brand-input resize-none"
@@ -327,16 +327,16 @@ export default function DailyLog() {
         <div>
           {historyLoading ? (
             <div className="space-y-3">
-              {[1,2,3].map(i => <div key={i} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6 animate-pulse h-24" />)}
+              {[1,2,3].map(i => <div key={i} className="apple-card-static p-8 animate-pulse h-24" />)}
             </div>
           ) : history.length === 0 ? (
-            <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-12 text-center">
+            <div className="apple-card-static p-12 text-center">
               <p className="text-brand-cream/40 font-body text-sm">No logs yet. Start tracking today!</p>
             </div>
           ) : (
             <div className="space-y-4">
               {history.map((ci) => (
-                <div key={ci.id} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
+                <div key={ci.id} className="apple-card-static p-8">
                   {/* Header */}
                   <div className="flex items-center justify-between mb-4">
                     <span className="font-headline font-semibold text-sm">
