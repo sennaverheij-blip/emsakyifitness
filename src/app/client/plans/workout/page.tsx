@@ -68,7 +68,7 @@ export default function WorkoutPlan() {
             <div key={i} className="apple-card-static overflow-hidden">
               <button type="button"
                 onClick={() => hasExercises && setExpanded(expanded === i ? null : i)}
-                className="w-full flex items-center justify-between p-5 text-left">
+                className="w-full flex items-center justify-between p-6 text-left">
                 <div className="flex items-center gap-4">
                   <div className={`w-2 h-2 rounded-full ${isRest ? 'bg-brand-slate' : 'bg-brand-bronze'}`} />
                   <div>
@@ -86,7 +86,7 @@ export default function WorkoutPlan() {
               </button>
 
               {expanded === i && hasExercises && (
-                <div className="border-t border-white/[0.06] p-5">
+                <div className="border-t border-white/[0.06] p-6">
                   {/* Warmup */}
                   {day.warmup && day.warmup.length > 0 && (
                     <div className="mb-4">
@@ -154,7 +154,7 @@ export default function WorkoutPlan() {
       </div>
 
       {plan.intensity_target && (
-        <div className="mt-6 p-4 bg-brand-surface rounded-lg border border-brand-card">
+        <div className="mt-8 apple-card-static p-8">
           <p className="text-xs text-brand-cream/40 font-body"><strong className="text-brand-cream/60">Intensity target:</strong> {plan.intensity_target}</p>
         </div>
       )}

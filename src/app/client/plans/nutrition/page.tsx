@@ -48,9 +48,9 @@ export default function NutritionPlan() {
   const groceryList = plan.grocery_list || {}
 
   return (
-    <div>
-      <h1 className="font-headline font-bold text-2xl mb-2">Nutrition Plan</h1>
-      <p className="text-sm text-brand-cream/50 font-body mb-6">Week {plan.week || 1}</p>
+    <div className="py-16">
+      <h1 className="heading-lg mb-2">Nutrition Plan</h1>
+      <p className="text-sm text-brand-cream/50 font-body mb-8">Week {plan.week || 1}</p>
 
       {/* Macro targets */}
       {targets.calories && (
