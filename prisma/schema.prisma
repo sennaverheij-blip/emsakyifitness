@@ -82,10 +82,17 @@ model CheckIn {
   mood                Int?
   energy              Int?
   sleepHours          Float?
+  sleepQuality        Int?
   trained             Boolean  @default(false)
   trainingLogJson     String?
   nutritionCompliance String?
+  offPlanMeals        String?
   waterMl             Int?
+  weightKg            Float?
+  steps               Int?
+  stressLevel         Int?
+  workoutName         String?
+  workoutPerformance  Int?
   notes               String?
   client User @relation(fields: [clientId], references: [id])
 }

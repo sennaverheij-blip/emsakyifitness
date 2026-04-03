@@ -1,3 +1,7 @@
+'use client'
+
+import PasswordChange from '@/components/portal/PasswordChange'
+
 export default function AdminSettings() {
   return (
     <div className="max-w-2xl">
@@ -34,6 +38,8 @@ export default function AdminSettings() {
             </div>
           </div>
         </div>
+
+        <PasswordChange />
 
         <button className="btn-primary">Save Settings</button>
       </div>
