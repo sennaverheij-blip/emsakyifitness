@@ -152,10 +152,10 @@ export default function ProgressPage() {
   }
 
   return (
-    <div>
-      <h1 className="font-headline font-bold text-2xl mb-6">Progress</h1>
+    <div className="py-16">
+      <h1 className="heading-lg mb-8">Progress</h1>
 
-      <div className="flex gap-4 mb-8 border-b border-brand-card">
+      <div className="flex gap-4 mb-8 border-b border-white/[0.06]">
         {(['photos', 'measurements', 'performance'] as const).map((t) => (
           <button key={t} onClick={() => setTab(t)}
             className={`pb-3 px-1 text-sm font-headline font-semibold uppercase tracking-wider transition-colors capitalize ${
@@ -169,7 +169,7 @@ export default function ProgressPage() {
       {tab === 'photos' && (
         <div>
           {/* Upload */}
-          <div className="border-2 border-dashed border-white/[0.06] rounded-lg p-8 text-center mb-8 hover:border-brand-bronze/40 transition-colors cursor-pointer">
+          <div className="border-2 border-dashed border-white/[0.06] rounded-2xl p-8 text-center mb-8 hover:border-brand-bronze/40 transition-colors cursor-pointer">
             <input type="file" accept="image/*" className="hidden" id="photoUpload" onChange={handlePhotoUpload} disabled={uploading} />
             <label htmlFor="photoUpload" className="cursor-pointer">
               <span className="text-3xl block mb-2">📷</span>
@@ -192,7 +192,7 @@ export default function ProgressPage() {
               <h3 className="text-xs text-brand-cream/40 font-headline uppercase tracking-wider mb-3">Your Photos</h3>
               <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
                 {photos.map((photo) => (
-                  <div key={photo.id} className="aspect-[3/4] bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden relative">
+                  <div key={photo.id} className="aspect-[3/4] apple-card-static overflow-hidden relative">
                     <img src={photo.url} alt={photo.angle || 'Progress photo'} className="w-full h-full object-cover" />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 p-2">
                       <span className="text-[10px] text-brand-cream/70 font-body">
@@ -209,7 +209,7 @@ export default function ProgressPage() {
               <h3 className="text-xs text-brand-cream/40 font-headline uppercase tracking-wider mb-3">No photos yet</h3>
               <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
                 {['Front', 'Side', 'Back'].map((label) => (
-                  <div key={label} className="aspect-[3/4] bg-white/[0.02] border border-white/[0.06] rounded-2xl flex flex-col items-center justify-center">
+                  <div key={label} className="aspect-[3/4] apple-card-static flex flex-col items-center justify-center">
                     <span className="text-2xl mb-2 opacity-20">◉</span>
                     <span className="text-[10px] text-brand-cream/30 font-body">{label}</span>
                   </div>
@@ -225,7 +225,7 @@ export default function ProgressPage() {
           <p className="text-sm text-brand-cream/50 font-body mb-6">Log your measurements to track visual changes over time.</p>
 
           {measurements.length > 0 && (
-            <div className="mb-6 p-4 bg-white/[0.02] border border-white/[0.06] rounded-2xl">
+            <div className="mb-6 apple-card-static p-8">
               <p className="text-xs text-brand-cream/40 font-body mb-2">
                 Last logged: {new Date(measurements[0].date).toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' })}
               </p>
@@ -238,7 +238,7 @@ export default function ProgressPage() {
             <div className="grid grid-cols-2 gap-4">
               {MEASUREMENT_FIELDS.map((field) => (
                 <div key={field}>
-                  <label className="block text-xs text-brand-cream/50 font-body mb-1">{field}</label>
+                  <label className="label-sm mb-1">{field}</label>
                   <input
                     type="number"
                     step="0.1"

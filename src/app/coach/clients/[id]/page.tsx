@@ -183,11 +183,11 @@ export default function ClientDetail() {
 
       {/* Plan Generation Form */}
       {showPlanForm && (
-        <div className="bg-brand-card border border-brand-bronze/30 rounded-lg p-6 mb-8">
-          <h3 className="font-headline font-semibold text-sm uppercase tracking-wider text-brand-bronze mb-4">Generate AI Plans</h3>
+        <div className="apple-card-static p-8 mb-8 !border-brand-bronze/30">
+          <h3 className="heading-md text-brand-bronze mb-6">Generate AI Plans</h3>
           <div className="grid sm:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-xs text-brand-cream/50 font-body mb-1.5">Week</label>
+              <label className="label-sm mb-1.5 block">Week</label>
               <select className="brand-input" value={planWeek} onChange={e => setPlanWeek(e.target.value)}>
                 {Array.from({ length: 16 }, (_, i) => (
                   <option key={i + 1} value={String(i + 1)}>Week {i + 1}</option>
@@ -195,7 +195,7 @@ export default function ClientDetail() {
               </select>
             </div>
             <div>
-              <label className="block text-xs text-brand-cream/50 font-body mb-1.5">Phase</label>
+              <label className="label-sm mb-1.5 block">Phase</label>
               <select className="brand-input" value={planPhase} onChange={e => setPlanPhase(e.target.value)}>
                 <option value="1">Phase 1 — The Audit</option>
                 <option value="2">Phase 2 — The Forge</option>
@@ -204,7 +204,7 @@ export default function ClientDetail() {
             </div>
           </div>
           <div className="mb-4">
-            <label className="block text-xs text-brand-cream/50 font-body mb-1.5">
+            <label className="label-sm mb-1.5 block">
               Coach Notes <span className="text-brand-cream/30">(instructions for the AI — be specific)</span>
             </label>
             <textarea
@@ -216,21 +216,21 @@ export default function ClientDetail() {
             />
           </div>
           {planStatus && (
-            <div className="mb-4 p-4 bg-white/[0.03] rounded-lg border border-white/[0.06]">
+            <div className="apple-card-static mb-4">
               <p className="text-sm font-body text-brand-bronze">{planStatus}</p>
             </div>
           )}
           <div className="flex flex-wrap gap-3">
             <button type="button" onClick={() => generatePlan('workout')} disabled={plansGenerating}
-              style={{ background: 'linear-gradient(135deg, #C9A961, #D4AF37)', color: '#0A0A0A', border: 'none', padding: '12px 24px', borderRadius: '50px', fontWeight: 600, fontSize: '14px', cursor: plansGenerating ? 'wait' : 'pointer', letterSpacing: '0.5px', textTransform: 'uppercase' as const, opacity: plansGenerating ? 0.7 : 1 }}>
+              className="btn-primary" style={{ opacity: plansGenerating ? 0.7 : 1 }}>
               {plansGenerating ? 'Generating...' : 'Generate Workout Plan'}
             </button>
             <button type="button" onClick={() => generatePlan('nutrition')} disabled={plansGenerating}
-              style={{ background: 'linear-gradient(135deg, #C85A17, #D4AF37)', color: '#0A0A0A', border: 'none', padding: '12px 24px', borderRadius: '50px', fontWeight: 600, fontSize: '14px', cursor: plansGenerating ? 'wait' : 'pointer', letterSpacing: '0.5px', textTransform: 'uppercase' as const, opacity: plansGenerating ? 0.7 : 1 }}>
+              className="btn-primary" style={{ opacity: plansGenerating ? 0.7 : 1 }}>
               {plansGenerating ? 'Generating...' : 'Generate Nutrition Plan'}
             </button>
             <button type="button" onClick={() => { setShowPlanForm(false); setPlanStatus('') }}
-              style={{ background: 'transparent', color: '#F5F1E880', border: '1px solid #4A4A4A', padding: '12px 24px', borderRadius: '50px', fontWeight: 600, fontSize: '14px', cursor: 'pointer' }}>
+              className="btn-secondary">
               Cancel
             </button>
           </div>
