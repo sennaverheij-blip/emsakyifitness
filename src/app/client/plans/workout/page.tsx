@@ -54,18 +54,18 @@ export default function WorkoutPlan() {
       </div>
 
       {plan.weekly_notes && (
-        <div className="bg-brand-card border-l-4 border-brand-bronze rounded-r-lg p-5 mb-6">
+        <div className="apple-card-static p-8 border-l-4 border-l-brand-bronze mb-8">
           <p className="text-sm font-body text-brand-cream/60">{plan.weekly_notes}</p>
         </div>
       )}
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {days.map((day: any, i: number) => {
           const hasExercises = day.main_block && day.main_block.length > 0
           const isRest = day.session_type?.toLowerCase().includes('rest') || day.session_type?.toLowerCase().includes('recovery')
 
           return (
-            <div key={i} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden">
+            <div key={i} className="apple-card-static overflow-hidden">
               <button type="button"
                 onClick={() => hasExercises && setExpanded(expanded === i ? null : i)}
                 className="w-full flex items-center justify-between p-5 text-left">
