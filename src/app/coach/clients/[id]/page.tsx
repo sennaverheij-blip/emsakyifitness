@@ -496,7 +496,7 @@ export default function ClientDetail() {
               ))}
             </div>
           ) : (
-            <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-8 text-center">
+            <div className="apple-card-static p-8 text-center">
               <p className="text-brand-cream/30 font-body text-sm">No check-ins recorded yet</p>
             </div>
           )}
@@ -505,14 +505,11 @@ export default function ClientDetail() {
 
       {/* ONBOARDING */}
       {tab === 'onboarding' && (
-        <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6">
+        <div className="apple-card-static p-8">
           {client.onboarding ? (
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <span className={`text-[10px] font-headline font-semibold uppercase tracking-wider px-2 py-1 rounded ${
-                  client.onboarding.status === 'completed' ? 'bg-green-400/10 text-green-400 border border-green-400/30' :
-                  'bg-brand-bronze/10 text-brand-bronze border border-brand-bronze/30'
-                }`}>{client.onboarding.status}</span>
+                <span className={client.onboarding.status === 'completed' ? 'badge badge-success' : 'badge badge-bronze'}>{client.onboarding.status}</span>
                 {client.onboarding.submittedAt && (
                   <span className="text-xs text-brand-cream/40">Submitted {new Date(client.onboarding.submittedAt).toLocaleDateString()}</span>
                 )}
@@ -539,8 +536,8 @@ export default function ClientDetail() {
                   <p className="text-green-400 font-headline font-semibold mb-2">Onboarding form sent!</p>
                   <p className="text-sm text-brand-cream/50 font-body mb-3">An email has been sent to {client.email}</p>
                   {onboardingUrl && (
-                    <div className="bg-white/[0.03] rounded-lg p-3 mt-3">
-                      <p className="text-xs text-brand-cream/40 font-body mb-1">Direct link (share manually if needed):</p>
+                    <div className="apple-card-static !p-4 mt-4">
+                      <p className="label-sm mb-1">Direct link (share manually if needed):</p>
                       <code className="text-xs text-brand-bronze break-all">{onboardingUrl}</code>
                     </div>
                   )}
@@ -549,7 +546,7 @@ export default function ClientDetail() {
                 <>
                   <p className="text-brand-cream/40 font-body text-sm mb-4">No onboarding form sent yet</p>
                   <button type="button" onClick={sendOnboarding} disabled={onboardingSending}
-                    style={{ position: 'relative', zIndex: 10, background: 'linear-gradient(135deg, #C9A961, #D4AF37)', color: '#0A0A0A', border: 'none', padding: '12px 24px', borderRadius: '50px', fontWeight: 600, fontSize: '14px', cursor: 'pointer', letterSpacing: '0.5px', textTransform: 'uppercase' as const }}>
+                    className="btn-primary">
                     {onboardingSending ? 'Sending...' : 'Send Onboarding Form'}
                   </button>
                   <p className="text-xs text-brand-cream/30 font-body mt-3">
