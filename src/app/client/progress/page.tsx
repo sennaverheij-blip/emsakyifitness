@@ -267,7 +267,7 @@ export default function ProgressPage() {
           <p className="text-sm text-brand-cream/50 font-body mb-6">Track your key lifts and performance benchmarks.</p>
           <div className="space-y-4">
             {PERFORMANCE_LIFTS.map((lift) => (
-              <div key={lift.label} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-4 flex items-center justify-between">
+              <div key={lift.label} className="apple-card-static p-6 flex items-center justify-between">
                 <div>
                   <p className="font-body text-sm text-brand-cream">{lift.label}</p>
                   <p className="text-xs text-brand-cream/40 font-body">Last: {getLatestForLift(lift.label)}</p>
