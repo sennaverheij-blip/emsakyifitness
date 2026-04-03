@@ -274,7 +274,7 @@ export default function ClientDetail() {
 
       {/* PRE-CALL OVERVIEW */}
       {tab === 'precall' && (
-        <div className="space-y-6">
+        <div className="space-y-8">
           {/* Red Flags & Wins */}
           <div className="grid md:grid-cols-2 gap-8">
             <div className="apple-card-static p-8">
