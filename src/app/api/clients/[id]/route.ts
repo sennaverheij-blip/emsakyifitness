@@ -73,6 +73,15 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
       const daysSince = Math.floor((Date.now() - new Date(lastCI.date).getTime()) / (1000 * 60 * 60 * 24))
       if (daysSince >= 3) redFlags.push(`No check-in for ${daysSince} days`)
     }
+    // Stress check
+    const stressEntries = last7.filter((ci) => ci.stressLevel != null)
+    if (stressEntries.length > 0) {
+      const avgStress = +(stressEntries.reduce((a, ci) => a + (ci.stressLevel || 0), 0) / stressEntries.length).toFixed(1)
+      if (avgStress >= 7) redFlags.push(`High average stress (${avgStress}/10)`)
+    }
+    // Off-plan meals check
+    const offPlanCount = last7.filter((ci) => ci.offPlanMeals && ci.offPlanMeals.length > 0).length
+    if (offPlanCount >= 3) redFlags.push(`Off-plan meals logged ${offPlanCount} times this week`)
 
     // Wins
     const wins: string[] = []
@@ -80,6 +89,17 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
     if (trainedDays >= 4) wins.push('Strong training consistency this week')
     if (avgMood !== null && avgMood >= 8) wins.push('High mood and motivation')
     if (nutritionCompliance >= 5) wins.push('Excellent nutrition compliance')
+    // Steps win
+    const stepEntries = last7.filter((ci) => ci.steps != null)
+    if (stepEntries.length > 0) {
+      const avgSteps = Math.round(stepEntries.reduce((a, ci) => a + (ci.steps || 0), 0) / stepEntries.length)
+      if (avgSteps >= 10000) wins.push(`Averaging ${avgSteps.toLocaleString()} steps/day`)
+    }
+    // Low stress win
+    if (stressEntries.length > 0) {
+      const avgStress = +(stressEntries.reduce((a, ci) => a + (ci.stressLevel || 0), 0) / stressEntries.length).toFixed(1)
+      if (avgStress <= 3) wins.push('Low stress levels this week')
+    }
 
     return NextResponse.json({
       id: client.id,
