@@ -241,15 +241,16 @@ export default function ClientDetail() {
       )}
 
       {/* Key Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-8">
+      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-3 mb-8">
         {[
-          { label: 'Trained', value: `${s.trainedDays}/${s.totalCheckIns > 0 ? s.totalCheckIns : '—'}`, sub: 'this week' },
-          { label: 'Mood', value: s.avgMood !== null ? `${s.avgMood}` : '—', sub: 'avg' },
-          { label: 'Energy', value: s.avgEnergy !== null ? `${s.avgEnergy}` : '—', sub: 'avg' },
-          { label: 'Sleep', value: s.avgSleep !== null ? `${s.avgSleep}h` : '—', sub: 'avg' },
-          { label: 'Nutrition', value: `${s.nutritionCompliance}/${s.totalCheckIns}`, sub: 'on plan' },
-          { label: 'Streak', value: `${s.streakDays}`, sub: 'days' },
-          { label: 'Check-ins', value: `${s.totalCheckIns}`, sub: 'last 7d' },
+          { label: 'Trained', value: `${s.trainedDays}/${s.totalCheckIns > 0 ? s.totalCheckIns : '—'}` },
+          { label: 'Mood', value: s.avgMood !== null ? `${s.avgMood}` : '—' },
+          { label: 'Energy', value: s.avgEnergy !== null ? `${s.avgEnergy}` : '—' },
+          { label: 'Sleep', value: s.avgSleep !== null ? `${s.avgSleep}h` : '—' },
+          { label: 'Nutrition', value: `${s.nutritionCompliance}/${s.totalCheckIns}` },
+          { label: 'Streak', value: `${s.streakDays}d` },
+          { label: 'Check-ins', value: `${s.totalCheckIns}` },
+          { label: 'Last Weight', value: (() => { const w = client.recentCheckIns.find((ci: any) => ci.weightKg); return w ? `${w.weightKg}kg` : '—' })() },
         ].map((stat) => (
           <div key={stat.label} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-3 text-center">
             <div className="font-headline font-bold text-lg text-brand-bronze">{stat.value}</div>
@@ -325,17 +326,21 @@ export default function ClientDetail() {
                   <thead>
                     <tr className="text-xs text-brand-cream/40 uppercase tracking-wider">
                       <th className="text-left pb-2">Day</th>
+                      <th className="text-center pb-2">Weight</th>
                       <th className="text-center pb-2">Mood</th>
                       <th className="text-center pb-2">Energy</th>
+                      <th className="text-center pb-2">Stress</th>
                       <th className="text-center pb-2">Sleep</th>
+                      <th className="text-center pb-2">Steps</th>
                       <th className="text-center pb-2">Trained</th>
                       <th className="text-center pb-2">Nutrition</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/[0.04]">
-                    {client.moodTrend.map((day, i) => (
+                    {client.moodTrend.map((day: any, i: number) => (
                       <tr key={i}>
-                        <td className="py-2 text-brand-cream/60">{new Date(day.date).toLocaleDateString('en', { weekday: 'short', day: 'numeric' })}</td>
+                        <td className="py-2 text-brand-cream/60 whitespace-nowrap">{new Date(day.date).toLocaleDateString('en', { weekday: 'short', day: 'numeric' })}</td>
+                        <td className="py-2 text-center text-brand-cream/50 text-xs">{day.weightKg ? `${day.weightKg}kg` : '—'}</td>
                         <td className="py-2 text-center">
                           <span className={`inline-block w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold ${
                             (day.mood || 0) >= 7 ? 'bg-green-400/10 text-green-400' :
@@ -350,8 +355,22 @@ export default function ClientDetail() {
                             'bg-red-400/10 text-red-400'
                           }`}>{day.energy || '—'}</span>
                         </td>
-                        <td className="py-2 text-center text-brand-cream/50">{day.sleep ? `${day.sleep}h` : '—'}</td>
-                        <td className="py-2 text-center">{day.trained ? <span className="text-green-400">✓</span> : <span className="text-brand-cream/20">✕</span>}</td>
+                        <td className="py-2 text-center">
+                          <span className={`inline-block w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold ${
+                            (day.stressLevel || 0) >= 7 ? 'bg-red-400/10 text-red-400' :
+                            (day.stressLevel || 0) >= 4 ? 'bg-brand-bronze/10 text-brand-bronze' :
+                            'bg-green-400/10 text-green-400'
+                          }`}>{day.stressLevel || '—'}</span>
+                        </td>
+                        <td className="py-2 text-center text-brand-cream/50 text-xs">
+                          {day.sleep ? `${day.sleep}h` : '—'}
+                          {day.sleepQuality ? <span className="block text-[10px] text-brand-cream/30">Q:{day.sleepQuality}</span> : null}
+                        </td>
+                        <td className="py-2 text-center text-brand-cream/50 text-xs">{day.steps ? day.steps.toLocaleString() : '—'}</td>
+                        <td className="py-2 text-center">
+                          {day.trained ? <span className="text-green-400">✓</span> : <span className="text-brand-cream/20">✕</span>}
+                          {day.workoutName && <span className="block text-[10px] text-brand-cream/30 truncate max-w-[80px]">{day.workoutName}</span>}
+                        </td>
                         <td className="py-2 text-center text-xs capitalize text-brand-cream/50">{day.nutrition || '—'}</td>
                       </tr>
                     ))}
@@ -394,31 +413,94 @@ export default function ClientDetail() {
       {tab === 'checkins' && (
         <div>
           {client.recentCheckIns.length > 0 ? (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {client.recentCheckIns.map((ci: any) => (
                 <div key={ci.id} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
-                  <div className="flex items-center justify-between mb-3">
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-4">
                     <span className="text-sm font-headline font-semibold">
                       {new Date(ci.date).toLocaleDateString('en', { weekday: 'long', month: 'short', day: 'numeric' })}
                     </span>
-                    <div className="flex gap-2">
-                      {ci.mood && <span className="text-xs bg-white/[0.03] px-2 py-0.5 rounded text-brand-cream/50">Mood: {ci.mood}/10</span>}
-                      {ci.energy && <span className="text-xs bg-white/[0.03] px-2 py-0.5 rounded text-brand-cream/50">Energy: {ci.energy}/10</span>}
+                    {ci.weightKg && (
+                      <span className="text-xs bg-brand-bronze/[0.08] text-brand-bronze px-2.5 py-1 rounded-full font-headline font-semibold">
+                        {ci.weightKg} kg
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Metric badges */}
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 mb-3">
+                    {ci.steps != null && (
+                      <div className="bg-white/[0.03] rounded-lg px-2.5 py-2 text-center">
+                        <div className="text-xs font-headline font-bold text-brand-bronze">{ci.steps.toLocaleString()}</div>
+                        <div className="text-[9px] text-brand-cream/30 uppercase tracking-wider">Steps</div>
+                      </div>
+                    )}
+                    {ci.waterMl != null && (
+                      <div className="bg-white/[0.03] rounded-lg px-2.5 py-2 text-center">
+                        <div className="text-xs font-headline font-bold text-brand-bronze">{(ci.waterMl / 1000).toFixed(1)}L</div>
+                        <div className="text-[9px] text-brand-cream/30 uppercase tracking-wider">Water</div>
+                      </div>
+                    )}
+                    {ci.sleepHours != null && (
+                      <div className="bg-white/[0.03] rounded-lg px-2.5 py-2 text-center">
+                        <div className="text-xs font-headline font-bold text-brand-bronze">{ci.sleepHours}h</div>
+                        <div className="text-[9px] text-brand-cream/30 uppercase tracking-wider">Sleep{ci.sleepQuality ? ` Q:${ci.sleepQuality}` : ''}</div>
+                      </div>
+                    )}
+                    {ci.energy != null && (
+                      <div className="bg-white/[0.03] rounded-lg px-2.5 py-2 text-center">
+                        <div className="text-xs font-headline font-bold text-brand-bronze">{ci.energy}/10</div>
+                        <div className="text-[9px] text-brand-cream/30 uppercase tracking-wider">Energy</div>
+                      </div>
+                    )}
+                    {ci.mood != null && (
+                      <div className="bg-white/[0.03] rounded-lg px-2.5 py-2 text-center">
+                        <div className="text-xs font-headline font-bold text-brand-bronze">{ci.mood}/10</div>
+                        <div className="text-[9px] text-brand-cream/30 uppercase tracking-wider">Mood</div>
+                      </div>
+                    )}
+                    {ci.stressLevel != null && (
+                      <div className="bg-white/[0.03] rounded-lg px-2.5 py-2 text-center">
+                        <div className={`text-xs font-headline font-bold ${ci.stressLevel >= 7 ? 'text-red-400' : ci.stressLevel >= 4 ? 'text-brand-bronze' : 'text-green-400'}`}>{ci.stressLevel}/10</div>
+                        <div className="text-[9px] text-brand-cream/30 uppercase tracking-wider">Stress</div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Detail rows */}
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1 text-xs font-body mb-2">
+                    <div>
+                      <span className="text-brand-cream/30">Trained: </span>
+                      <span className={ci.trained ? 'text-green-400' : 'text-brand-cream/50'}>
+                        {ci.trained ? (ci.workoutName || 'Yes') : 'Rest day'}
+                      </span>
+                    </div>
+                    {ci.trained && ci.workoutPerformance != null && (
+                      <div>
+                        <span className="text-brand-cream/30">Performance: </span>
+                        <span className="text-brand-cream/60">{ci.workoutPerformance}/10</span>
+                      </div>
+                    )}
+                    <div>
+                      <span className="text-brand-cream/30">Nutrition: </span>
+                      <span className="text-brand-cream/60 capitalize">{ci.nutritionCompliance || '—'}</span>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs font-body">
-                    <div><span className="text-brand-cream/40">Trained:</span> <span className={ci.trained ? 'text-green-400' : 'text-brand-cream/50'}>{ci.trained ? 'Yes' : 'No'}</span></div>
-                    <div><span className="text-brand-cream/40">Sleep:</span> <span className="text-brand-cream/70">{ci.sleepHours ? `${ci.sleepHours}h` : '—'}</span></div>
-                    <div><span className="text-brand-cream/40">Nutrition:</span> <span className="text-brand-cream/70 capitalize">{ci.nutritionCompliance || '—'}</span></div>
-                    <div><span className="text-brand-cream/40">Water:</span> <span className="text-brand-cream/70">{ci.waterMl ? `${(ci.waterMl / 1000).toFixed(1)}L` : '—'}</span></div>
-                  </div>
-                  {ci.notes && <p className="mt-3 text-sm text-brand-cream/50 font-body italic">&ldquo;{ci.notes}&rdquo;</p>}
+
+                  {ci.offPlanMeals && (
+                    <p className="text-xs text-brand-orange/60 font-body mt-1">Off-plan: {ci.offPlanMeals}</p>
+                  )}
+
+                  {ci.notes && (
+                    <p className="mt-3 text-sm text-brand-cream/40 font-body italic border-t border-white/[0.04] pt-3">&ldquo;{ci.notes}&rdquo;</p>
+                  )}
                 </div>
               ))}
             </div>
           ) : (
             <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-8 text-center">
-              <p className="text-brand-cream/40 font-body text-sm">No check-ins recorded yet</p>
+              <p className="text-brand-cream/30 font-body text-sm">No check-ins recorded yet</p>
             </div>
           )}
         </div>
