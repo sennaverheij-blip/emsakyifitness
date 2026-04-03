@@ -238,7 +238,7 @@ export default function ClientDetail() {
       )}
 
       {/* Key Stats */}
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-3 mb-8">
+      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-16">
         {[
           { label: 'Trained', value: `${s.trainedDays}/${s.totalCheckIns > 0 ? s.totalCheckIns : '—'}` },
           { label: 'Mood', value: s.avgMood !== null ? `${s.avgMood}` : '—' },
@@ -249,22 +249,22 @@ export default function ClientDetail() {
           { label: 'Check-ins', value: `${s.totalCheckIns}` },
           { label: 'Last Weight', value: (() => { const w = client.recentCheckIns.find((ci: any) => ci.weightKg); return w ? `${w.weightKg}kg` : '—' })() },
         ].map((stat) => (
-          <div key={stat.label} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-3 text-center">
-            <div className="font-headline font-bold text-lg text-brand-bronze">{stat.value}</div>
-            <div className="text-[10px] text-brand-cream/40 font-body uppercase tracking-wider">{stat.label}</div>
+          <div key={stat.label} className="apple-card-static !p-4 text-center">
+            <div className="font-headline font-bold text-xl text-brand-bronze">{stat.value}</div>
+            <div className="label-sm mt-1">{stat.label}</div>
           </div>
         ))}
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-4 mb-6 border-b border-brand-card overflow-x-auto">
+      <div className="flex gap-6 mb-8 border-b border-white/[0.06] overflow-x-auto">
         {([
           ['precall', 'Pre-Call Overview'],
           ['checkins', 'Check-in History'],
           ['onboarding', 'Onboarding'],
         ] as const).map(([key, label]) => (
           <button key={key} onClick={() => setTab(key)}
-            className={`pb-3 px-1 text-sm font-headline font-semibold uppercase tracking-wider transition-colors whitespace-nowrap ${
+            className={`pb-4 px-1 text-sm font-headline font-semibold uppercase tracking-wider transition-colors whitespace-nowrap ${
               tab === key ? 'text-brand-bronze border-b-2 border-brand-bronze' : 'text-brand-cream/40 hover:text-brand-cream/60'
             }`}>
             {label}
@@ -276,9 +276,9 @@ export default function ClientDetail() {
       {tab === 'precall' && (
         <div className="space-y-6">
           {/* Red Flags & Wins */}
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
-              <h3 className="text-xs font-headline font-semibold uppercase tracking-wider text-red-400/80 mb-3 flex items-center gap-2">
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="apple-card-static p-8">
+              <h3 className="label-sm text-red-400/80 mb-4 flex items-center gap-2">
                 <span>⚠</span> Red Flags
               </h3>
               {client.redFlags.length > 0 ? (
@@ -295,8 +295,8 @@ export default function ClientDetail() {
               )}
             </div>
 
-            <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
-              <h3 className="text-xs font-headline font-semibold uppercase tracking-wider text-green-400/80 mb-3 flex items-center gap-2">
+            <div className="apple-card-static p-8">
+              <h3 className="label-sm text-green-400/80 mb-4 flex items-center gap-2">
                 <span>✓</span> Wins to Acknowledge
               </h3>
               {client.wins.length > 0 ? (
@@ -315,25 +315,25 @@ export default function ClientDetail() {
           </div>
 
           {/* Mood & Energy Trend */}
-          <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
-            <h3 className="text-xs font-headline font-semibold uppercase tracking-wider text-brand-cream/60 mb-4">7-Day Trend</h3>
+          <div className="apple-card-static p-8">
+            <h3 className="heading-md mb-6">7-Day Trend</h3>
             {client.moodTrend.length > 0 ? (
               <div className="overflow-x-auto">
-                <table className="w-full text-sm font-body">
+                <table className="apple-table">
                   <thead>
-                    <tr className="text-xs text-brand-cream/40 uppercase tracking-wider">
-                      <th className="text-left pb-2">Day</th>
-                      <th className="text-center pb-2">Weight</th>
-                      <th className="text-center pb-2">Mood</th>
-                      <th className="text-center pb-2">Energy</th>
-                      <th className="text-center pb-2">Stress</th>
-                      <th className="text-center pb-2">Sleep</th>
-                      <th className="text-center pb-2">Steps</th>
-                      <th className="text-center pb-2">Trained</th>
-                      <th className="text-center pb-2">Nutrition</th>
+                    <tr>
+                      <th className="text-left">Day</th>
+                      <th className="text-center">Weight</th>
+                      <th className="text-center">Mood</th>
+                      <th className="text-center">Energy</th>
+                      <th className="text-center">Stress</th>
+                      <th className="text-center">Sleep</th>
+                      <th className="text-center">Steps</th>
+                      <th className="text-center">Trained</th>
+                      <th className="text-center">Nutrition</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/[0.04]">
+                  <tbody>
                     {client.moodTrend.map((day: any, i: number) => (
                       <tr key={i}>
                         <td className="py-2 text-brand-cream/60 whitespace-nowrap">{new Date(day.date).toLocaleDateString('en', { weekday: 'short', day: 'numeric' })}</td>
@@ -380,9 +380,9 @@ export default function ClientDetail() {
           </div>
 
           {/* AI Pre-Call Analysis */}
-          <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xs font-headline font-semibold uppercase tracking-wider text-brand-cream/60">AI Pre-Call Briefing</h3>
+          <div className="apple-card-static p-8">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="heading-md">AI Pre-Call Briefing</h3>
               <button onClick={generateAnalysis} disabled={aiLoading} className="btn-primary !py-2 !px-4 !text-xs">
                 {aiLoading ? 'Generating...' : aiAnalysis ? 'Regenerate' : 'Generate Briefing'}
               </button>
@@ -399,8 +399,8 @@ export default function ClientDetail() {
           </div>
 
           {/* Coach Notes */}
-          <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
-            <h3 className="text-xs font-headline font-semibold uppercase tracking-wider text-brand-cream/60 mb-3">Private Coach Notes</h3>
+          <div className="apple-card-static p-8">
+            <h3 className="heading-md mb-4">Private Coach Notes</h3>
             <textarea className="brand-input resize-none" rows={3} placeholder="Add private notes before the call..." />
           </div>
         </div>

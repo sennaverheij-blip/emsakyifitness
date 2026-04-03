@@ -34,7 +34,7 @@ export default function WorkoutPlan() {
 
   if (!plan) {
     return (
-      <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-12 text-center">
+      <div className="apple-card-static p-12 text-center">
         <h2 className="font-headline font-bold text-xl mb-2">Your workout plan is being built</h2>
         <p className="text-sm text-brand-cream/50 font-body">Your coach is preparing your personalised training protocol. Check back soon.</p>
       </div>
@@ -45,11 +45,11 @@ export default function WorkoutPlan() {
   const phaseLabel = plan.phase_label || `Phase ${plan.phase || 1}`
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="py-16">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="font-headline font-bold text-2xl">Workout Plan</h1>
-          <p className="text-sm text-brand-cream/50 font-body">{phaseLabel} · Week {plan.week || 1}</p>
+          <h1 className="heading-lg">Workout Plan</h1>
+          <p className="text-sm text-brand-cream/50 font-body mt-1">{phaseLabel} · Week {plan.week || 1}</p>
         </div>
       </div>
 
