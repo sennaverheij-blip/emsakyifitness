@@ -97,7 +97,7 @@ export default function DailyLog() {
       <input
         type="range" min={min} max={max} value={value}
         onChange={(e) => onChange(+e.target.value)}
-        className="w-full h-1.5 bg-white/[0.04] rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-brand-bronze [&::-webkit-slider-thumb]:cursor-pointer"
+        className="w-full h-2 bg-black/30 rounded-full appearance-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gradient-to-br [&::-webkit-slider-thumb]:from-brand-bronze [&::-webkit-slider-thumb]:to-brand-gold [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(201,169,97,0.4)] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-brand-bronze/30"
       />
       {(lowLabel || highLabel) && (
         <div className="flex justify-between text-[10px] text-brand-cream/30 mt-1">
@@ -142,11 +142,11 @@ export default function DailyLog() {
       {/* Tabs */}
       <div className="flex items-center justify-between mb-8">
         <h1 className="heading-lg">Daily Tracker</h1>
-        <div className="flex bg-white/[0.04] rounded-lg p-0.5">
+        <div className="flex bg-black/30 rounded-xl p-1 border border-white/[0.06]">
           {(['log', 'history'] as const).map((t) => (
             <button key={t} onClick={() => setTab(t)}
               className={`px-4 py-2 text-xs font-headline font-semibold uppercase tracking-wider rounded-md transition-all ${
-                tab === t ? 'bg-brand-bronze/15 text-brand-bronze' : 'text-brand-cream/40 hover:text-brand-cream/60'
+                tab === t ? 'bg-gradient-to-br from-brand-bronze/20 to-brand-gold/10 text-brand-bronze shadow-[0_0_12px_rgba(201,169,97,0.1)] border border-brand-bronze/20' : 'text-brand-cream/35 hover:text-brand-cream/50 border border-transparent'
               }`}>
               {t === 'log' ? "Today's Log" : 'History'}
             </button>
@@ -166,7 +166,7 @@ export default function DailyLog() {
 
             {/* ── Date & Weight ── */}
             <section className="apple-card-static p-8">
-              <h2 className="label-sm mb-5 text-brand-bronze">Date & Body Weight</h2>
+              <h2 className="font-headline font-semibold text-xs uppercase tracking-[0.15em] text-gradient-bronze mb-5">Date & Body Weight</h2>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="label-sm mb-1.5">Date</label>
@@ -188,7 +188,7 @@ export default function DailyLog() {
 
             {/* ── Activity ── */}
             <section className="apple-card-static p-8">
-              <h2 className="label-sm mb-5 text-brand-bronze">Activity</h2>
+              <h2 className="font-headline font-semibold text-xs uppercase tracking-[0.15em] text-gradient-bronze mb-5">Activity</h2>
               <div className="space-y-4">
                 <div>
                   <label className="label-sm mb-1.5">Steps</label>
@@ -207,7 +207,7 @@ export default function DailyLog() {
 
             {/* ── Sleep ── */}
             <section className="apple-card-static p-8">
-              <h2 className="label-sm mb-5 text-brand-bronze">Sleep</h2>
+              <h2 className="font-headline font-semibold text-xs uppercase tracking-[0.15em] text-gradient-bronze mb-5">Sleep</h2>
               <div className="space-y-4">
                 <div>
                   <label className="label-sm mb-1.5">Duration (hours)</label>
@@ -224,7 +224,7 @@ export default function DailyLog() {
 
             {/* ── Nutrition ── */}
             <section className="apple-card-static p-8">
-              <h2 className="label-sm mb-5 text-brand-bronze">Nutrition</h2>
+              <h2 className="font-headline font-semibold text-xs uppercase tracking-[0.15em] text-gradient-bronze mb-5">Nutrition</h2>
               <div className="space-y-4">
                 <div>
                   <label className="label-sm mb-2">Did you follow your meal plan?</label>
@@ -233,8 +233,8 @@ export default function DailyLog() {
                       <button key={val} type="button" onClick={() => setNutritionCompliance(val)}
                         className={`px-4 py-2 rounded-lg text-sm font-body capitalize transition-all ${
                           nutritionCompliance === val
-                            ? 'bg-brand-bronze/10 border border-brand-bronze text-brand-bronze'
-                            : 'bg-white/[0.04] border border-white/[0.06] text-brand-cream/50 hover:text-brand-cream/70'
+                            ? 'bg-gradient-to-br from-brand-bronze/15 to-brand-gold/10 border border-brand-bronze/30 text-brand-bronze shadow-[0_0_12px_rgba(201,169,97,0.1)]'
+                            : 'bg-black/20 border border-white/[0.08] text-brand-cream/45 hover:text-brand-cream/65 hover:border-white/[0.12]'
                         }`}>
                         {val === 'off-plan' ? 'Off-plan' : val}
                       </button>
@@ -257,7 +257,7 @@ export default function DailyLog() {
 
             {/* ── Workout ── */}
             <section className="apple-card-static p-8">
-              <h2 className="label-sm mb-5 text-brand-bronze">Workout</h2>
+              <h2 className="font-headline font-semibold text-xs uppercase tracking-[0.15em] text-gradient-bronze mb-5">Workout</h2>
               <div className="space-y-4">
                 <div>
                   <label className="label-sm mb-2">Did you train today?</label>
@@ -266,8 +266,8 @@ export default function DailyLog() {
                       <button key={String(val)} type="button" onClick={() => setTrained(val)}
                         className={`px-6 py-2.5 rounded-lg font-body text-sm transition-all ${
                           trained === val
-                            ? 'bg-brand-bronze/10 border border-brand-bronze text-brand-bronze'
-                            : 'bg-white/[0.04] border border-white/[0.06] text-brand-cream/50'
+                            ? 'bg-gradient-to-br from-brand-bronze/15 to-brand-gold/10 border border-brand-bronze/30 text-brand-bronze shadow-[0_0_12px_rgba(201,169,97,0.1)]'
+                            : 'bg-black/20 border border-white/[0.08] text-brand-cream/45 hover:border-white/[0.12]'
                         }`}>
                         {val ? 'Yes, I trained' : 'Rest day'}
                       </button>
@@ -295,7 +295,7 @@ export default function DailyLog() {
 
             {/* ── Energy & Mood ── */}
             <section className="apple-card-static p-8">
-              <h2 className="label-sm mb-5 text-brand-bronze">Energy & Mood</h2>
+              <h2 className="font-headline font-semibold text-xs uppercase tracking-[0.15em] text-gradient-bronze mb-5">Energy & Mood</h2>
               <div className="space-y-5">
                 <SliderField label="Energy Level" value={energy} onChange={setEnergy}
                   lowLabel="Drained" highLabel="Fired up" />
@@ -308,7 +308,7 @@ export default function DailyLog() {
 
             {/* ── Daily Comments ── */}
             <section className="apple-card-static p-8">
-              <h2 className="label-sm mb-5 text-brand-bronze">Daily Comments</h2>
+              <h2 className="font-headline font-semibold text-xs uppercase tracking-[0.15em] text-gradient-bronze mb-5">Daily Comments</h2>
               <textarea
                 value={notes} onChange={(e) => setNotes(e.target.value)}
                 rows={3} className="brand-input resize-none"
