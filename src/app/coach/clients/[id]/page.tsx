@@ -412,14 +412,14 @@ export default function ClientDetail() {
           {client.recentCheckIns.length > 0 ? (
             <div className="space-y-4">
               {client.recentCheckIns.map((ci: any) => (
-                <div key={ci.id} className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5">
+                <div key={ci.id} className="apple-card-static p-8">
                   {/* Header */}
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-sm font-headline font-semibold">
                       {new Date(ci.date).toLocaleDateString('en', { weekday: 'long', month: 'short', day: 'numeric' })}
                     </span>
                     {ci.weightKg && (
-                      <span className="text-xs bg-brand-bronze/[0.08] text-brand-bronze px-2.5 py-1 rounded-full font-headline font-semibold">
+                      <span className="badge badge-bronze">
                         {ci.weightKg} kg
                       </span>
                     )}
@@ -428,37 +428,37 @@ export default function ClientDetail() {
                   {/* Metric badges */}
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 mb-3">
                     {ci.steps != null && (
-                      <div className="bg-white/[0.03] rounded-lg px-2.5 py-2 text-center">
+                      <div className="apple-card-static !p-3 text-center !rounded-xl">
                         <div className="text-xs font-headline font-bold text-brand-bronze">{ci.steps.toLocaleString()}</div>
                         <div className="text-[9px] text-brand-cream/30 uppercase tracking-wider">Steps</div>
                       </div>
                     )}
                     {ci.waterMl != null && (
-                      <div className="bg-white/[0.03] rounded-lg px-2.5 py-2 text-center">
+                      <div className="apple-card-static !p-3 text-center !rounded-xl">
                         <div className="text-xs font-headline font-bold text-brand-bronze">{(ci.waterMl / 1000).toFixed(1)}L</div>
                         <div className="text-[9px] text-brand-cream/30 uppercase tracking-wider">Water</div>
                       </div>
                     )}
                     {ci.sleepHours != null && (
-                      <div className="bg-white/[0.03] rounded-lg px-2.5 py-2 text-center">
+                      <div className="apple-card-static !p-3 text-center !rounded-xl">
                         <div className="text-xs font-headline font-bold text-brand-bronze">{ci.sleepHours}h</div>
                         <div className="text-[9px] text-brand-cream/30 uppercase tracking-wider">Sleep{ci.sleepQuality ? ` Q:${ci.sleepQuality}` : ''}</div>
                       </div>
                     )}
                     {ci.energy != null && (
-                      <div className="bg-white/[0.03] rounded-lg px-2.5 py-2 text-center">
+                      <div className="apple-card-static !p-3 text-center !rounded-xl">
                         <div className="text-xs font-headline font-bold text-brand-bronze">{ci.energy}/10</div>
                         <div className="text-[9px] text-brand-cream/30 uppercase tracking-wider">Energy</div>
                       </div>
                     )}
                     {ci.mood != null && (
-                      <div className="bg-white/[0.03] rounded-lg px-2.5 py-2 text-center">
+                      <div className="apple-card-static !p-3 text-center !rounded-xl">
                         <div className="text-xs font-headline font-bold text-brand-bronze">{ci.mood}/10</div>
                         <div className="text-[9px] text-brand-cream/30 uppercase tracking-wider">Mood</div>
                       </div>
                     )}
                     {ci.stressLevel != null && (
-                      <div className="bg-white/[0.03] rounded-lg px-2.5 py-2 text-center">
+                      <div className="apple-card-static !p-3 text-center !rounded-xl">
                         <div className={`text-xs font-headline font-bold ${ci.stressLevel >= 7 ? 'text-red-400' : ci.stressLevel >= 4 ? 'text-brand-bronze' : 'text-green-400'}`}>{ci.stressLevel}/10</div>
                         <div className="text-[9px] text-brand-cream/30 uppercase tracking-wider">Stress</div>
                       </div>
