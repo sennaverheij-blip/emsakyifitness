@@ -14,6 +14,51 @@ const PERFORMANCE_LIFTS = [
   { label: 'Running Pace (1km)', unit: 'min' },
 ]
 
+const MAX_DIMENSION = 1920
+const TARGET_BYTES = 3_500_000
+
+async function compressImage(file: File): Promise<File> {
+  if (!file.type.startsWith('image/')) return file
+
+  const dataUrl = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = () => reject(reader.error)
+    reader.readAsDataURL(file)
+  })
+
+  const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+    const el = new Image()
+    el.onload = () => resolve(el)
+    el.onerror = () => reject(new Error('Failed to load image'))
+    el.src = dataUrl
+  })
+
+  const scale = Math.min(1, MAX_DIMENSION / Math.max(img.width, img.height))
+  const canvas = document.createElement('canvas')
+  canvas.width = Math.round(img.width * scale)
+  canvas.height = Math.round(img.height * scale)
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return file
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+
+  let quality = 0.85
+  let blob: Blob | null = null
+  for (let i = 0; i < 6; i++) {
+    blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, 'image/jpeg', quality)
+    )
+    if (!blob) break
+    if (blob.size <= TARGET_BYTES) break
+    quality -= 0.15
+    if (quality < 0.3) break
+  }
+  if (!blob) return file
+
+  const name = file.name.replace(/\.[^.]+$/, '') + '.jpg'
+  return new File([blob], name, { type: 'image/jpeg', lastModified: Date.now() })
+}
+
 type PerformanceLog = { exercise: string; value: number; unit: string; date: string }
 type Measurement = { weightKg: number | null; bodyFatPct: number | null; measurementsJson: string | null; date: string }
 type Photo = { id: string; url: string; angle: string | null; date: string; week: number | null }
@@ -135,8 +180,9 @@ export default function ProgressPage() {
     setUploading(true)
     setPhotoMsg('')
     try {
+      const compressed = await compressImage(file)
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('file', compressed)
       const res = await fetch('/api/progress-photos', { method: 'POST', body: formData })
       const data = await res.json()
       if (data.success) {

@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { writeFile } from 'fs/promises'
-import path from 'path'
+import { put } from '@vercel/blob'
 
 export async function POST(req: Request) {
   try {
@@ -23,15 +22,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
     }
 
-    const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
-
     const ext = file.name.split('.').pop() || 'jpg'
-    const filename = `${user.id}_${Date.now()}.${ext}`
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads')
-    await writeFile(path.join(uploadDir, filename), buffer)
-
-    const url = `/uploads/${filename}`
+    const filename = `progress/${user.id}_${Date.now()}.${ext}`
+    const blob = await put(filename, file, { access: 'public', addRandomSuffix: false })
+    const url = blob.url
 
     const photo = await prisma.progressPhoto.create({
       data: {
